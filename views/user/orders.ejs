@@ -1,0 +1,154 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+    <div class="top-brands container-fluid">
+        <% if (locals.order_data) { %>
+            <div class="col-12">
+                <div class="bg-secondary orderround rounded h-100 p-4">
+                    <h2>Order history</h2>
+                    <div class="grid_3 grid_5 table-responsive">
+                        <table class="custom-table">
+                            <thead class="custom-table-head">
+                                <tr>
+                                    <th scope="col">No:</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Details</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Refund</th>
+                                </tr>
+                            </thead>
+                            <tbody class="custom-table-body">
+                                <% order_data.forEach((orders, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= orders.createdAt.toLocaleDateString() %>
+                                        </td>
+                                        <td>
+                                            <% orders.items.forEach((items, index)=> { %>
+                                                <%= items.product.name %> <br>
+                                                    <% }) %>
+                                        </td>
+                                        <td>
+                                            <% orders.items.forEach((items)=> { %>
+                                                <%= items.quantity %> <br>
+                                                    <% }) %>
+                                        </td>
+                                        <td>₹<%= orders.total %>
+                                        </td>
+                                        <td>
+                                            <% orders.items.forEach((items)=> { %>
+                                                <img src="../product-images/<%= items.product.images[0] %>"
+                                                    class="custom-image" width="60px" alt="">
+                                                <% }) %>
+                                        </td>
+                                        <td>
+                                            <%= orders.status %>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <a type="submit" href="/orderDetailsPage?id=<%= orders._id %>"
+                                                    class="custom-btn btn-light">Details</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <% if (orders.status==="cancelled" ) { %>
+                                                <%= orders.status %>
+                                                    <% } else if (orders.status==="Returned" ||
+                                                        orders.status==="Refunded" || orders.status==="Delivered" ) { %>
+                                                        <%= orders.status %>
+                                                            <% } else { %>
+                                                                <button type="button" onclick="canopenPopup()"
+                                                                    class="custom-btn btn-danger">Cancel</button>
+                                                                <div id="custom-ce-popup" class="custom-popup">
+                                                                    <span class="custom-close"
+                                                                        onclick="canclosePopup()">&times;</span>
+                                                                    <div>
+                                                                        <form action="/order_cancel" method="post">
+                                                                            <input type="hidden" name="orderId"
+                                                                                value="<%= orders._id %>">
+
+                                                                            <div
+                                                                                style="display: flex; justify-content: center; flex-direction: column;">
+                                                                                <textarea name="reason" required
+                                                                                    placeholder="Cancelling Reason"
+                                                                                    class="custom-textarea"></textarea>
+                                                                                <button type="submit" value="cancelled"
+                                                                                    class="custom-btn btn-danger">Cancel</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (orders.status==="Delivered" ) { %>
+                                                <button type="button" onclick="openPopup()"
+                                                    class="custom-btn btn-danger">Return</button>
+                                                <div id="custom-re-popup" class="custom-popup">
+                                                    <span class="custom-close" onclick="closePopup()">&times;</span>
+                                                    <div>
+                                                        <form action="/ordereReturn?id=<%= orders._id %>" method="post">
+                                                            <input type="text" name="reason" required>
+                                                            <button type="submit" value="Return"
+                                                                class="custom-btn btn-danger">Return</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <% } else { %>
+                <div class="container-fluid mt-5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body cart">
+                                    <div class="col-sm-12 empty-cart-cls text-center">
+                                        <img src="https://i.pinimg.com/564x/6f/fd/64/6ffd64c5366898c59bbc91d9aec935c3.jpg"
+                                            width="130px" height="130px"
+                                            class="custom-img img-fluid cart_img mb-4 mr-3">
+                                        <h3><strong>You have no order history</strong></h3>
+                                        <h4>Order something to make me happy :)</h4>
+                                        <a href="/" class="custom-btn btn-primary cart-btn-transform m-3"
+                                            data-abc="true">Continue Shopping</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('custom-re-popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('custom-re-popup').style.display = 'none';
+        }
+
+        function canopenPopup() {
+            document.getElementById('custom-ce-popup').style.display = 'block';
+        }
+
+        function canclosePopup() {
+            document.getElementById('custom-ce-popup').style.display = 'none';
+        }
+    </script>
+
+    <%- include('../layouts/userFooter.ejs') %>

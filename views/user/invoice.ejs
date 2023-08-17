@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link rel="stylesheet" type="text/css" href="/css/invoice.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .invoice-title {
+            margin-bottom: 20px;
+        }
+
+        .address-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .address-section div {
+            width: 48%;
+        }
+
+        .address-section strong {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .address-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .payment-method {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            
+        }
+
+        li{
+             list-style-type: none
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .totals-row {
+            font-weight: bold;
+        }
+
+        .table-header {
+            border-top: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: flex-end; padding: 20px;">
+        <button class="btn btn-danger" type="button" id="download-button">Download</button>
+    </div>
+    <div id="invoice" class="container contai">
+        <div class="row">
+            <div class="col-xs-12">
+                <div style="display: flex; justify-content: space-between;" class="invoice-title">
+                    <h2>Invoice</h2><h3 class="pull-right">Order <%= order_data.Order_ID %></h3>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <address>
+                        <strong>Billed To:</strong><br>
+                            <ul class="payment_address">
+                                <li>Fullname: <span><%= order_data.address.name %> </span></li>       
+                                <li>Address: <span><%= order_data.address.address %> </span></li>       
+                                <li>Phone No: <span><%= order_data.address.mobile %> </span></li>       
+                                <li>Pincode: <span><%= order_data.address.pincode %> </span></li>       
+                                <li>City/Town: <span><%= order_data.address.city %> </span></li>       
+                                <li>State: <span><%= order_data.address.state %> </span></li>       
+                                <li>Address Type: <span><%= order_data.address.addressType %> </span></li>       
+                            </ul>
+                    
+                        </address>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <address>
+                        <strong>Shipped To:</strong><br>
+                        <ul class="payment_address">
+                            <li>Fullname: <span><%= order_data.address.name %> </span></li>       
+                            <li>Address: <span><%= order_data.address.address %> </span></li>       
+                            <li>Phone No: <span><%= order_data.address.mobile %> </span></li>       
+                            <li>Pincode: <span><%= order_data.address.pincode %> </span></li>       
+                            <li>City/Town: <span><%= order_data.address.city %> </span></li>       
+                            <li>State: <span><%= order_data.address.state %> </span></li>       
+                            <li>Address Type: <span><%= order_data.address.addressType %> </span></li>       
+                        </ul>
+                
+                        </address>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <address>
+                            <strong>Payment Method:</strong><br>
+                           <%= order_data.payment_method %>
+                        </address>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <address>
+                            <strong>Order Date:</strong><br>
+                            <%= order_data.createdAt.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %>
+                            <br><br>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Item</strong></td>
+                                        <td class="text-center"><strong>Price</strong></td>
+                                        <td class="text-center"><strong>Quantity</strong></td>
+                                        <td class="text-right"><strong>Totals</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                                    <% order_data.items.forEach(function(items,index) { %>
+                                    <tr>
+                                        <td><%= items.product.name %></td>
+                                        <td class="text-center"><%= items.product.price %></td>
+                                        <td class="text-center"><%= items.quantity %></td>
+                                        <td class="text-right"><% items.product.price*items.quantity %></td>
+                                    </tr>
+                                    <% }) %>
+                                    
+                                    <tr>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line text-center"><strong>Subtotal</strong></td>
+                                        
+                                        <td class="thick-line text-right">₹<%= order_data.total %></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line text-center"><strong>Discount</strong></td>
+                                        <td class="thick-line text-right"> <span>-</span> ₹<%= order_data.discount%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line text-center"><strong>Shipping</strong></td>
+                                        <td class="no-line text-right">₹<%= order_data.shipping_charge%></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="no-line"></td>
+                                        <td class="no-line"></td>
+                                        <td class="no-line text-center"><strong>Total</strong></td>
+                                        <td class="no-line text-right">₹<%= order_data.total - order_data.discount + order_data.shipping_charge %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<!-- PDF AND EXCEL -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script>
+    const button = document.getElementById('download-button');
+
+    function generatePDF() {
+        // Choose the element that your content will be rendered to.
+        const element = document.getElementById('invoice');
+        // Choose the element and save the PDF for your user.
+        html2pdf().from(element).save();
+    }
+
+    button.addEventListener('click', generatePDF);
+
+   
+</script>
+</body>
+</html>

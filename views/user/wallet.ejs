@@ -1,0 +1,132 @@
+<%- include('../layouts/userHeader.ejs') %>
+    <style>
+        .custom-card {
+            margin-top: 30px;
+            min-height: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            /* Add padding to provide box shadow */
+            margin-bottom: 30px;
+            /* Add margin between the cards */
+        }
+
+        /* Make the cards take half of the screen each */
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        /* Remove extra padding added by Bootstrap */
+        .card {
+            padding: 0;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-5 col-md-12 col-sm-12">
+                <div class="custom-card">
+                    <div class="row m-l-0 m-r-0">
+                        <div class="col-sm-12 bg-c-lite-green user-profile">
+                            <div style="border-bottom: 2px solid gray;">
+                                <h3 class="m-b-20 p-b-5 b-b-default"
+                                    style="text-transform: uppercase; font-weight: 600;">
+                                    Wallet Credited
+                                </h3>
+                            </div>
+                            <div class="wallert">
+                                <ul class="profile">
+                                    <% referalWallet.forEach(function(referalWallet) { %>
+
+                                        <div class="col-md-6">
+                                            <li style="margin-top: 10%;">
+                                                <h4>Refferal</h4>
+                                                <div style="margin-top: 5px;" class="wallet-dropdown">
+                                                    <h5>
+                                                        Credited Date:
+                                                        <% const createdAt = new Date(user.createdAt);
+                                                           const day = String(createdAt.getDate()).padStart(2, '0');
+                                                           const month = String(createdAt.getMonth() + 1).padStart(2, '0');
+                                                           const year = createdAt.getFullYear();
+                                                           const formattedDate = `${day}-${month}-${year}`;
+                                                        %>
+                                                        <%= formattedDate %>
+                                                        : ₹100
+                                                    </h5>
+                                                </div>
+                                            </li>
+                                        </div>
+                                        <% }); %>
+                                        
+                                        <% orderrefund.forEach(function(orders) { %>
+                                            <div class="col-md-6">
+                                                <li style="margin-top: 10%;">
+                                                    <h4>Refund</h4>
+                                                    <div style="margin-top: 5px;" class="wallet-dropdown">
+                                                        <h5>
+                                                            Ordered Date(<%= orders.createdAt.toLocaleDateString() %>
+                                                                ) :
+                                                                ₹
+                                                                <%= orders.total %>
+                                                        </h5>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                            <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-7 col-sm-12">
+                <div class="custom-card">
+                    <div class="col-sm-12 bg-c-lite-green user-profile">
+                        <div style="border-bottom: 2px solid gray;" class="row">
+                            <h3 class="m-b-20 p-b-5 b-b-default"
+                                style="width: 300px; text-transform: uppercase; font-weight: 600;">
+                                Wallet debited
+                            </h3>
+                        </div>
+                        <div class="col-lg-7 col-md-12 walletdetail">
+                            <ul class="profile">
+                                <% order_data.forEach(function(orders) { %>
+                                    <div class="col-md-6">
+                                        <li style="margin-top: 10%;">
+                                            <div class="wallet-dropdown">
+                                                <h5 style="line-height: 1.5;">
+                                                    Debited Date (<%= orders.createdAt.toLocaleDateString() %>): &nbsp;
+                                                        <br> &nbsp; Debited ₹<%= orders.total %>
+                                                </h5>
+                                            </div>
+                                            <div><a type="submit" href="/orderDetailsPage?id=<%= orders._id %>"
+                                                    class="btn btn-info">Details</a></div>
+                                        </li>
+                                    </div>
+                                    <% }); %>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 30px;"
+                            class="col-sm-12 col-lg-5 col-md-12 d-flex justify-content-center unique-card-container">
+                            <div class="unique-card card">
+                                <div class="unique-front card-body">
+                                    <img src="images/FLIP TO SEE YOUR WALLET.gif" alt="GIF Image" loop>
+                                </div>
+                                <div class="unique-back card-body">
+                                    <h2>Your Current <br> Wallet Amount <br> Is ₹ <%= user.totalWallet %>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../layouts/userFooter.ejs') %>
+
+
+
+
+        <h4 style="margin-top: 40px;">Current Wallet: <%= user.totalWallet %>

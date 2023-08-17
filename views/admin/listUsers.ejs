@@ -1,0 +1,75 @@
+<%- include('../layouts/adminHeader.ejs') %>
+    <section class="content-main">
+
+
+        <div class="table-responsive">
+            <h3>Users List</h3>
+            <br>
+            <table id="thisTable" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% user.forEach((user)=> { %>
+                        <tr>
+                            <td>
+                                <%= user.name %>
+                            </td>
+                            <td>
+                                <%= user.email %>
+                            </td>
+                            <td>
+                                <%= user.mobile %>
+                            </td>
+
+                            <% if (user.is_blocked==false) { %>
+                                <td><span style="color: green;">Active</span></td>
+                                <% } else { %>
+                                    <td><span style="color: red;">Blocked</span></td>
+                                    <% } %>
+                                        <td>
+                                            <div>
+
+
+                                                <% if (user.is_blocked==false) { %>
+                                                    <!-- Check if the user is blocked -->
+                                                    <a href="/admin/blockUser?id=<%= user._id %>">
+                                                        <i class="bx bx-trash me-1"></i> Block
+                                                        <!-- Display the "Block" button -->
+                                                    </a>
+                                                    <% } else { %> <!-- If the user is not blocked -->
+                                                        <a href="/admin/unBlockUser?id=<%= user._id %>">
+                                                            <i class="bx bx-trash me-1"></i> Unblock
+                                                            <!-- Display the "Unblock" button -->
+                                                        </a>
+                                                        <% } %>
+                                            </div>
+        </div>
+        </td>
+        </tr>
+        <% }); %>
+            </tbody>
+            </table>
+            </div>
+
+    </section> <!-- content-main end// -->
+
+
+    <script>
+        $(document).ready(function () {
+            $.noConflict();
+            $('#thisTable').DataTable({
+                "paging": true,          // Enable pagination
+                "pageLength": 10,        // Number of rows per page
+                "lengthMenu": [10, 25, 50, 75, 100],  // Dropdown options for rows per page
+
+            });
+        });
+    </script>
+    <%- include('../layouts/adminFooter.ejs') %>

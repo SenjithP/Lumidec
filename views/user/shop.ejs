@@ -1,0 +1,452 @@
+<%- include('../layouts/userHeader.ejs') %>
+    <style>
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid gray;
+            padding: 5px 30px;
+        }
+
+        .custom-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            z-index: 1;
+        }
+
+        .custom-dropdown-content div {
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- //navigation -->
+    <!-- breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+                <li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+                <li class="active">Shop</li>
+            </ol>
+        </div>
+    </div>
+    <!-- //breadcrumbs -->
+    <!--- gourmet --->
+    <div style="padding: 0;" class="products">
+        <div style="padding: 0;" class="container-fluid">
+
+            <div style="padding-top: 0;" class="top-brands">
+                <div class="col-md-12 products-right">
+                    <div class="products-right-grid">
+                        <div class="products-right-grids">
+                            <div style="display: flex; justify-content: space-evenly;">
+                                <div>
+                                    <select id="country" onchange="change_country(this.value)"
+                                        class="frm-field required sect">
+                                        <option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i> SHOP
+                                            BY CATEGORY
+                                        </option>
+                                        <% category.forEach(function(item) { %>
+                                            <option value="<%= item._id %>" data-url="/categoryShop?id=<%= item._id %>">
+                                                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                                <%= item.name %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select id="country" onchange="handleSelection(this.value)"
+                                        class="frm-field required sect">
+                                        <option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>PRICE
+                                            RANGE FILTERING</option>
+                                        <option value="inputFields"><i class="fa fa-arrow-right"
+                                                aria-hidden="true"></i>Enter Values</option>
+                                    </select>
+                                    <div id="inputFields" style="display: none;">
+                                        <form action="/pricerange" method="get">
+                                            <input type="number" id="inputField1" name="min_price"
+                                                class="frm-field required sect" placeholder="Minimum Price">
+                                            <input type="number" id="inputField2" name="max_price"
+                                                class="frm-field required sect" placeholder="Maximum Price">
+                                            <button type="submit" class="btn btn-success">Filter</button>
+                                        </form>
+                                    </div>
+                                    <div>
+                                        <% if (locals.msg) { %>
+                                            <div id="msgg" class="alert alert-success"><%- locals.msg %></div>
+                                            <% } %>
+                                                <script>
+                                                    setTimeout(function () {
+                                                        var msgDiv = document.getElementById("msgg");
+                                                        if (msgDiv) {
+                                                            msgDiv.style.display = "none";
+                                                        }
+                                                    }, 3000);
+                                                </script>
+                                    </div>
+                                </div>
+                                <div>
+                                    <select id="country1" onchange="redirectOnChange(this.value)"
+                                        class="frm-field required sect">
+                                        <option value="null"><i class="fa fa-arrow-right" aria-hidden="true"></i>SORT BY
+                                            PRICING</option>
+                                        <option value="/sortProductsLowToHigh">
+                                            <i class="fa fa-arrow-right" aria-hidden="true"></i> Low price To High Price
+                                        </option>
+                                        <option value="/sortProductsHighToLow">
+                                            <i class="fa fa-arrow-right" aria-hidden="true"></i> High price To Low Price
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="custom-dropdown" id="couponDropdown">
+                                    <span class="frm-field required sect">
+                                        Available Coupons <i class="fa-solid fa-caret-down fa-bounce fa-xl"
+                                            style="color: #07d53a;"></i>
+                                    </span>
+                                    <div style="width: 270px;" class="custom-dropdown-content">
+
+                                        <!-- Replace this section with your EJS loop -->
+                                        <% coupon.forEach(coupon=> { %>
+
+                                            <div style="line-height: 3;"
+                                                onclick="copyCouponCode('<%= coupon.couponCode %>')">
+                                                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                                <strong>
+                                                    <%= coupon.discount %>% off
+                                                </strong>
+                                                <%= coupon.couponCode %><br>
+
+                                            </div>
+                                            <% }); %>
+
+                                                <!-- End of EJS loop -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+
+
+                    <div style="padding-top: 10px;">
+                        <h2>All Products</h2>
+                        <% for (let i=0; i < product.length; i +=6) { %>
+                            <div class="agile_top_brands_grids">
+                                <% for (let j=i; j < i + 6&& j < product.length; j++) { %>
+                                    <% if (product[j].is_listed) { %>
+                                        <div class="col-md-2 top_brand_left">
+                                            <div class="hover14 column">
+                                                <div class="agile_top_brand_left_grid">
+                                                    <div style="display: flex; justify-content: flex-end;">
+                                                        <form id="addToWishList_<%= product[j]._id %>"
+                                                            action="/wishlist" method="post">
+                                                            <% if (locals.user) { %>
+                                                                <input type="hidden" name="productIds"
+                                                                    value="<%= product[j]._id %>">
+                                                                <button
+                                                                    style="margin-left: 160px; background-color: white; border: none;"
+                                                                    id="wishlist_<%= product[j]._id %>" type="submit"
+                                                                    name="submit" class="wishlistButtons"><i
+                                                                        class="fa-solid fa-heart fa-lg"
+                                                                        style="color: #fe9126;"></i></button>
+                                                                <% } else { %>
+                                                                    <button
+                                                                        style="margin-left: 160px; background-color: white; border: none;"
+                                                                        id="wishlist_<%= product[j]._id %>"
+                                                                        type="button"
+                                                                        onclick="alert('You need to login first!')"
+                                                                        name="submit" class="wishlistButtons"><i
+                                                                            class="fa-solid fa-heart fa-lg"
+                                                                            style="color: #fe9126;"></i></button>
+                                                                    <% } %>
+                                                        </form>
+
+                                                    </div>
+                                                    <div class="agile_top_brand_left_grid1">
+                                                        <figure>
+                                                            <div class="snipcart-item block">
+                                                                <div class="snipcart-thumb">
+                                                                    <a href="/single?id=<%=product[j]._id %>">
+                                                                        <img style="width: 150px; height: 150px;"
+                                                                            title=" " alt=" "
+                                                                            src="../product-images/<%= product[j].images[0] %>"></a>
+                                                                    <p>
+                                                                        <%= product[j].name %>
+                                                                    </p>
+                                                                    <h4>
+                                                                        <%= `₹${product[j].price}` %>
+                                                                            <span>₹10000</span>
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="snipcart-details top_brand_home_details">
+                                                                    <form action="/shop" method="post"
+                                                                        id="addToCartForm_<%= product[j]._id %>">
+                                                                        <fieldset>
+                                                                            <input type="hidden" name="cmd"
+                                                                                value="_cart">
+                                                                            <input type="hidden" name="add" value="1">
+                                                                            <input type="hidden" name="business"
+                                                                                value=" ">
+                                                                            <input type="hidden" name="item_name"
+                                                                                value="<%= product[j].name %>">
+                                                                            <input type="hidden" name="amount"
+                                                                                value="35.99">
+                                                                            <input type="hidden" name="discount_amount"
+                                                                                value="1.00">
+                                                                            <input type="hidden" name="currency_code"
+                                                                                value="USD">
+                                                                            <input type="hidden" name="return"
+                                                                                value=" ">
+                                                                            <input type="hidden" name="cancel_return"
+                                                                                value=" ">
+                                                                            <% if (locals.user) { %>
+                                                                                <input type="hidden" name="productId"
+                                                                                    value="<%= product[j]._id %>">
+                                                                                <button
+                                                                                    id="cartBtn_<%= product[j]._id %>"
+                                                                                    type="submit" name="submit"
+                                                                                    class="cartButtons">Add to
+                                                                                    cart</button>
+
+                                                                                <a href="/cart"><button
+                                                                                        style="background-color: green;    font-size: 14px;
+                                                                                        padding: 7px 0; width: 100%; text-decoration: none; 
+                                                                                        text-transform: uppercase; color: white; border: none;"
+                                                                                        hidden
+                                                                                        id="goToCartBtn_<%= product[j]._id %>"
+                                                                                        type="button" name="submit"
+                                                                                        class="goToCartBtnS">Go to
+                                                                                        cart</button></a>
+
+                                                                                <% } else { %>
+                                                                                    <button
+                                                                                        id="cartBtn_<%= product[j]._id %>"
+                                                                                        type="button"
+                                                                                        onclick="alert('You need to login first!')"
+                                                                                        name="submit"
+                                                                                        class="cartButtons">Add to
+                                                                                        cart</button>
+
+                                                                                    <a href="/cart"><button
+                                                                                            style="background-color: green;    font-size: 14px;
+                                                                                            padding: 7px 0; width: 100%; text-decoration: none; 
+                                                                                            text-transform: uppercase; color: white; border: none;"
+                                                                                            hidden
+                                                                                            id="goToCartBtn_<%= product[j]._id %>"
+                                                                                            type="button" name="submit"
+                                                                                            class="goToCartBtnS">Go to
+                                                                                            cart</button></a>
+                                                                                    <% } %>
+                                                                        </fieldset>
+                                                                    </form>
+                                                                </div>
+                                                                <div id="message_<%= product[j]._id %>" class="message"
+                                                                    style="display: none; color: green;"></div>
+                                                            </div>
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% } %>
+                                                <div class="clearfix"></div>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+   <% for (let j = 0; j < product.length; j++) { %>
+            document.getElementById('addToCartForm_<%= product[j]._id %>').addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent form submission
+                const productId = document.querySelector('#addToCartForm_<%= product[j]._id %> input[name="productId"]').value;
+                try {
+                    const response = await fetch(`/addToCart/${productId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        var addButton = document.getElementById('cartBtn_<%= product[j]._id %>');
+                        var goToCartButton = document.getElementById('goToCartBtn_<%= product[j]._id %>');
+
+                        addButton.style.display = 'none'; // Hide the "Add to cart" button
+                        goToCartButton.style.display = 'block'; // Show the "Go to cart" button
+
+                        Toastify({
+                            text: `<i class="fa-sharp fa-solid fa-circle-check fa-bounce fa-xl"></i>   ${data.message}`,
+                            duration: 3000,
+                            className: "info",
+                            gravity: "bottom",
+                            position: "center",
+                            style: {
+                                background: "green",
+                                border: "5px double black",
+                                'border-color': "white",
+                            },
+                            escapeMarkup: false, // Disable HTML escaping
+                        }).showToast();
+                    } else {
+                        Toastify({
+                            text: `<i class="fa-solid fa-circle-exclamation fa-beat fa-xl"></i>   ${data.message}`,
+                            duration: 3000,
+                            className: "info",
+                            gravity: "bottom",
+                            position: "center",
+                            style: {
+                                background: "red",
+                                border: "5px double black",
+                                'border-color': "white",
+                            },
+                            escapeMarkup: false, // Disable HTML escaping
+                        }).showToast();
+                    }
+                    // Remove the event listener after successful response
+                    document.getElementById('addToCartForm_<%= product[j]._id %>').removeEventListener('submit', arguments.callee);
+                } catch (error) {
+                    console.log(error.message);
+                }
+            });
+<% } %>
+    </script>
+
+    <script>
+    <% for (let j = 0; j < product.length; j++) { %>
+            document.getElementById('addToWishList_<%= product[j]._id %>').addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent form submission
+                const productId = document.querySelector('#addToWishList_<%= product[j]._id %> input[name="productIds"]').value;
+                try {
+                    const response = await fetch(`/addToWishlist/${productId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        var button = document.getElementById('wishlist_<%= product[j]._id %>');
+                        button.disabled = true;
+                        button.querySelector('i.fa-heart').style.color = 'green';
+
+                        Toastify({
+                            text: `<i class="fa-sharp fa-solid fa-circle-check fa-bounce fa-xl"></i>   ${data.message}`,
+                            duration: 3000,
+                            className: "info",
+                            gravity: "bottom",
+                            position: "center",
+                            style: {
+                                background: "green",
+                                border: "5px double black",
+                                'border-color': "white",
+                            },
+                            escapeMarkup: false, // Disable HTML escaping
+                        }).showToast();
+                    } else {
+                        Toastify({
+                            text: `<i class="fa-solid fa-circle-exclamation fa-beat fa-xl"></i>   ${data.message}`,
+                            duration: 3000,
+                            className: "info",
+                            gravity: "bottom",
+                            position: "center",
+                            style: {
+                                background: "red",
+                                border: "5px double black",
+                                'border-color': "white",
+                            },
+                            escapeMarkup: false, // Disable HTML escaping
+                        }).showToast();
+                    }
+                    // Remove the event listener after successful response
+                    document.getElementById('addToWishList_<%= product[j]._id %>').removeEventListener('submit', arguments.callee);
+                } catch (error) {
+                    console.log(error.message);
+                }
+            });
+<% } %>
+    </script>
+
+    <script>document.addEventListener('DOMContentLoaded', function () {
+                var categoryHeading = document.querySelector('.category-heading');
+                var categoryDropdown = document.querySelector('#categoryDropdown');
+
+                // Toggle the dropdown when the heading is clicked
+                categoryHeading.addEventListener('click', function () {
+                    categoryDropdown.classList.toggle('show');
+                });
+            });
+    </script>
+
+    <!-- TO SHOW MIN-MAX INPUT FIELD  -->
+    <script>
+        function handleSelection(value) {
+            var inputFieldsDiv = document.getElementById("inputFields");
+            if (value === "inputFields") {
+                inputFieldsDiv.style.display = "block"; // Show the input fields and button
+            } else {
+                inputFieldsDiv.style.display = "none"; // Hide the input fields and button for other options
+            }
+        }
+    </script>
+
+    <!-- HIGH-LOW AND LOW-HIGH SORTING  -->
+    <script>
+        function redirectOnChange(selectedValue) {
+            if (selectedValue !== "null") {
+                // Redirect the user to the selected URL
+                window.location.href = selectedValue;
+            }
+        }
+    </script>
+
+    <script>
+
+
+        // Attach click event listeners to each option in the custom dropdown
+        const dropdown = document.getElementById('couponDropdown');
+        const dropdownContent = dropdown.querySelector('.custom-dropdown-content');
+
+
+        // Show/hide the custom dropdown content on click
+        dropdown.addEventListener('click', function () {
+            dropdownContent.style.display = (dropdownContent.style.display === 'none') ? 'block' : 'none';
+        });
+
+        // Close the custom dropdown when clicking outside it
+        document.addEventListener('click', function (event) {
+            if (!dropdown.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- COPY CODE TO CLIPBOARD -->
+    <script>
+        function copyCouponCode(text) {
+            navigator.clipboard.writeText(text).then(function () {
+                // Show the toast message using the Toastify library
+                Toastify({
+                    text: '✓ Coupon code copied successfully!', // Use a Unicode character for the icon
+                    duration: 3000,
+                    gravity: 'bottom',
+                    position: 'center',
+                    backgroundColor: 'green',
+                }).showToast();
+            }).catch(function (err) {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+    <%- include('../layouts/userFooter.ejs') %>

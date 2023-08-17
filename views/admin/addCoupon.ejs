@@ -1,0 +1,153 @@
+<%- include('../layouts/adminHeader.ejs') %>
+    <section class="content-main">
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Coupon </h2>
+                    <p>Add, edit or Change Status</p>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form action="/admin/addCoupon" method="post">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Coupon Code</label>
+                                    <div style="display: flex;"><input type="text" placeholder="Type here"
+                                            class="form-control" id="couponInput" name="code" readonly />
+                                        <button class="btn btn-primary" id="generateButton"
+                                            style="padding: 5px;">Generate</button>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Discount in %</label>
+                                    <input type="number" placeholder="Type here" class="form-control" id="discount"
+                                        name="discount" required />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Min Purchase Amount</label>
+                                    <input type="number" placeholder="Type here" class="form-control" id="min_purchase"
+                                        name="min_purchase" required />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Max Discount Amount</label>
+                                    <input type="number" placeholder="Type here" class="form-control" id="max_discount"
+                                        name="max_discount" required />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="date" placeholder="Type here" class="form-control" id="expiry"
+                                        name="expiry" required />
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary">Create Coupon</button>
+                                    <p>
+                                        <%=(typeof msg!=='undefined' )?msg:""%>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Coupon code</th>
+                                            <th>Discount in %</th>
+                                            <th>Min Purchase Amount</th>
+                                            <th>Max Discount Amount</th>
+                                            <th>Expiry Date</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% availableCoupons.forEach((coupon)=> { %>
+                                            <tr>
+                                                <td><b>
+                                                        <%= coupon.couponCode %>
+                                                    </b></td>
+                                                <td>
+                                                    <%= coupon.discount %>
+                                                </td>
+                                                <td>
+                                                    <%= coupon.minPurchase %>
+                                                </td>
+                                                <td>
+                                                    <%= coupon.maxDiscount %>
+                                                </td>
+                                                <td>
+                                                    <%= new Date(coupon.expires).toLocaleDateString() %>
+                                                </td>
+                                                <% if (coupon.statusEnable==true) { %>
+                                                    <td><span style="color: green;">Listed</span></td>
+                                                    <% } else { %>
+                                                        <td><span style="color: red;">Unlisted</span></td>
+                                                        <% } %>
+                                                            <!-- <td title="" class="tooltip-ellipsis"></td> -->
+
+                                                            <td class="text-end">
+                                                                <div class="dropdown">
+                                                                    <a href="#" data-bs-toggle="dropdown"
+                                                                        class="btn btn-light rounded btn-sm font-sm">
+                                                                        <i class="material-icons md-more_horiz"></i>
+                                                                    </a>
+                                                                    <div class="dropdown-menu">
+
+                                                                        <a class="dropdown-item"
+                                                                            href="/admin/editCoupon?id=<%=coupon._id %>">Edit
+                                                                            info</a>
+                                                                        <a class="dropdown-item text-danger"
+                                                                            href="/admin/changeCouponStatus?id=<%=coupon._id %>">Change
+                                                                            Status</a>
+                                                                        <a class="dropdown-item text-danger"
+                                                                            href="/admin/deleteCoupon?id=<%=coupon._id %>">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+
+
+    <!-- GENERATING COUPON -->
+    <script>
+        function generateRandomString(length) {
+            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let result = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                result += charset[randomIndex];
+            }
+            return result;
+        }
+        function couponGenHelper() {
+            let prefix = "Lumi-"
+            const randomPart = generateRandomString(7);
+            return prefix + randomPart
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            // Event listener for the "Generate Coupon" button
+            document.getElementById('generateButton').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                const couponInput = document.getElementById('couponInput');
+                const generatedCoupon = couponGenHelper();
+                couponInput.value = generatedCoupon;
+            });
+        });
+    </script>
+
+    <%- include('../layouts/adminFooter.ejs') %>

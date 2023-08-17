@@ -1,0 +1,299 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+    <section class="content-main">
+
+        <!-- Sale & Revenue Start -->
+        <div class="container-fluid">
+            <div class="row g-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card">
+                        <i class="fa fa-chart-line"></i>
+                        <div class="ms-3">
+                            <p>Today's Order</p>
+                            <h6>
+                                <%= todaySales %>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card">
+                        <i class="fa fa-chart-bar"></i>
+                        <div class="ms-3">
+                            <p>Total Sale</p>
+                            <h6>
+                                <%= totalsales %>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card">
+                        <i class="fa fa-chart-area"></i>
+                        <div class="ms-3">
+                            <p>Today Revenue</p>
+                            <h6>
+                                <%= revenue %>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card">
+                        <i class="fa fa-chart-pie"></i>
+                        <div class="ms-3">
+                            <p>Total Revenue</p>
+                            <h6>
+                                <%= Revenue %>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sale & Revenue End -->
+
+        <!-- Sales Chart Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-12 col-xl-6">
+                    <div class="text-center linechart rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">Monthly Sales</h6>
+                        </div>
+                        <canvas id="line-chart"></canvas>
+                    </div>
+
+                    <div class="text-center sales-chart rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">Daily Revenue</h6>
+                        </div>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-xl-6">
+                    <div class="text-center pie-chart rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">Order Status</h6>
+                        </div>
+                        <canvas id="pie-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Sales Chart End -->
+
+
+
+    <!-- Widgets Start -->
+
+    <!-- Widgets End -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+    <span id="totalsales" hidden>
+        <%= totalsales %>
+    </span>
+    <span id="ordershipped" hidden>
+        <%= Ordershipped %>
+    </span>
+    <span id="orderpending" hidden>
+        <%= Orderpending %>
+    </span>
+    <span id="ordercancelled" hidden>
+        <%= Ordercancelled %>
+    </span>
+    <span id="OrderReturn" hidden>
+        <%= OrderReturn %>
+    </span>
+    <span id="OrderRefunded" hidden>
+        <%= OrderRefunted %>
+    </span>
+
+    <span id="monthlysales" hidden>
+        <%= JSON.stringify(salesCountByMonth) %>
+    </span>
+
+
+    <script>
+        var salesCountByMonth = JSON.parse(document.getElementById('monthlysales').textContent);
+        const salesCountByMonthObj = {
+            Jan: 0,
+            Feb: 0,
+            Mar: 0,
+            Apr: 0,
+            May: 0,
+            Jun: 0,
+            Jul: 0,
+            Aug: 0,
+            Sep: 0,
+            Oct: 0,
+            Nov: 0,
+            Dec: 0,
+        };
+
+
+        salesCountByMonth.forEach((monthData) => {
+            const { month, count } = monthData;
+            switch (month) {
+                case 1:
+                    salesCountByMonthObj.Jan = count;
+                    break;
+                case 2:
+                    salesCountByMonthObj.Feb = count;
+                    break;
+                case 3:
+                    salesCountByMonthObj.Mar = count;
+                    break;
+                case 4:
+                    salesCountByMonthObj.Apr = count;
+                    break;
+                case 5:
+                    salesCountByMonthObj.May = count;
+                    break;
+                case 6:
+                    salesCountByMonthObj.Jun = count;
+                    break;
+                case 7:
+                    salesCountByMonthObj.Jul = count;
+                    break;
+                case 8:
+                    salesCountByMonthObj.Aug = count;
+                    break;
+                case 9:
+                    salesCountByMonthObj.Sep = count;
+                    break;
+                case 10:
+                    salesCountByMonthObj.Oct = count;
+                    break;
+                case 11:
+                    salesCountByMonthObj.Nov = count;
+                    break;
+                case 12:
+                    salesCountByMonthObj.Dec = count;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+
+        const salesCountJan = salesCountByMonthObj.Jan;
+        const salesCountFeb = salesCountByMonthObj.Feb;
+        const salesCountMar = salesCountByMonthObj.Mar;
+        const salesCountApr = salesCountByMonthObj.Apr;
+        const salesCountMay = salesCountByMonthObj.May;
+        const salesCountJun = salesCountByMonthObj.Jun;
+        const salesCountJul = salesCountByMonthObj.Jul;
+        const salesCountAug = salesCountByMonthObj.Aug;
+        const salesCountSep = salesCountByMonthObj.Sep;
+        const salesCountOct = salesCountByMonthObj.Oct;
+        const salesCountNov = salesCountByMonthObj.Nov;
+        const salesCountDec = salesCountByMonthObj.Dec;
+        // Access the chart labels and data passed from the route
+
+        // Create the chart
+        new Chart(document.getElementById('line-chart'), {
+            type: 'line',
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: 'Sales',
+                    data: [salesCountJan, salesCountFeb, salesCountMar, salesCountApr, salesCountMay, salesCountJun, salesCountJul, salesCountAug, salesCountSep, salesCountOct, salesCountNov, salesCountDec],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        // second
+
+        let totalsales = Number(document.getElementById('totalsales').innerHTML)
+        let ordershipped = Number(document.getElementById('ordershipped').innerHTML)
+        let orderpending = Number(document.getElementById('orderpending').innerHTML)
+        let ordercancelled = Number(document.getElementById('ordercancelled').innerHTML)
+        let OrderReturn = Number(document.getElementById('OrderReturn').innerHTML)
+        let OrderRefunded = Number(document.getElementById('OrderRefunded').innerHTML)
+        console.log(totalsales, ordershipped, orderpending, ordercancelled, OrderReturn, OrderRefunded)
+
+
+        new Chart(document.getElementById('pie-chart'), {
+            type: 'pie',
+            data: {
+                labels: ['Orders Delivered', 'Orders Shipped', 'Orders Pending', 'OrderRefunded', 'Orders Cancelled', 'Order Return'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [totalsales, ordershipped, orderpending, OrderRefunded, ordercancelled, OrderReturn],
+                    backgroundColor: [
+                        "rgba(149, 46, 49, 0.7)",
+                        "rgba(126, 100, 48, 0.7)",
+                        "rgba(12, 100, 48, 0.7)",
+                        "rgba(37, 91, 76, 0.7)",
+                        "rgba(95, 42, 98, 0.7)",
+                        "rgba(260, 85, 105, 0.7)"
+                    ],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Access the chart labels and data passed from the route
+        const chartLabels = JSON.parse('<%- chartLabels %>')
+        const chartData = JSON.parse('<%- chartData %>')
+
+        // Create the chart
+        new Chart(document.getElementById('salesChart'), {
+            type: 'bar',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: chartData,
+                    backgroundColor: 'rgba(50, 150, 150, 0.4)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Delay the display of the message by 3 seconds
+        setTimeout(function () {
+            const messageElement = document.getElementById('message');
+            if (messageElement) {
+                messageElement.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+
+    <%- include('../layouts/adminFooter.ejs') %>

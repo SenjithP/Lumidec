@@ -1,0 +1,127 @@
+<%- include('../layouts/adminHeader.ejs') %>
+        <section class="content-main">
+
+
+            <div class="container-fluid pt-4 px-4">
+                <div class=" text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Recent Sales</h6>
+                        <div style="border: 1px solid whitesmoke; padding: 10px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+                            <form action="/admin/filterorder" method="post">
+                                <input class="filterdate" name="preDate" value="<%= preDate %>" type="date">
+                                <input class="filterdate" name="postDate" value="<%= postDate %>" type="date">
+                                <button type="submit" style="padding:0 15px;" class="btn btn-danger">Filter</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="salesexcel">
+                        <table id="orderTable" class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">NO</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Products</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (locals.order_data) { %>
+                                    <% order_data.forEach(function(orders, index) { %>
+                                        <tr class="blackcolor">
+                                            <td>
+                                                <%= index + 1 %>
+                                            </td>
+                                            <td>
+                                                <%= orders.user.name %>
+                                            </td>
+                                            <td>
+                                                <%= orders.createdAt.toLocaleDateString() %>
+                                            </td>
+                                            <td>
+                                                <div class="order_pro">
+                                                    <% orders.items.forEach((items)=> { %>
+                                                        <ul>
+                                                            <li>
+                                                                <%= items.product.name %>
+                                                            </li>
+                                                        </ul>
+                                                        <% }) %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <% orders.items.forEach((items)=> { %>
+                                                    <ul>
+                                                        <li style="list-style: none;">
+                                                            <%= items.quantity %>
+                                                        </li>
+                                                    </ul>
+                                                    <% }) %>
+                                            </td>
+                                            <td>₹<%= orders.total %>
+                                            </td>
+                                            <td>
+                                                <%= orders.status %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Include your custom scripts -->
+            <script src="../assets/js/vendors/bootstrap.bundle.min.js"></script>
+            <script src="../assets/js/vendors/select2.min.js"></script>
+            <script src="../assets/js/vendors/perfect-scrollbar.js"></script>
+            <script src="../assets/js/vendors/jquery.fullscreen.min.js"></script>
+            <script src="../assets/js/main.js" type="text/javascript"></script>
+
+            <!-- DataTables Initialization -->
+            <script>
+                $(document).ready(function () {
+                    $('#orderTable').DataTable({
+                        dom: 'Bfrtip', // Add export buttons to table wrapper
+                        buttons: [
+                            'copy', 'csv',
+                            {
+                                extend: 'excelHtml5',
+                                text: 'Export to Excel',
+                                filename: 'table-data',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: null,
+                                messageTop: null,
+                                messageBottom: null,
+                                className: 'btn btn-primary'
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                text: 'Export to PDF',
+                                filename: 'table-data',
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                title: null,
+                                messageTop: null,
+                                messageBottom: null,
+                                className: 'btn btn-primary'
+                            },
+                            'print' // Add desired export buttons
+                        ]
+                    });
+                });
+            </script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+</html>

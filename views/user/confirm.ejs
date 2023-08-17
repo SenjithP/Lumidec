@@ -1,0 +1,153 @@
+<%- include('../layouts/userHeader.ejs') %>
+    <!-- //navigation -->
+    <!-- breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+                <li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+                <li class="active">Order success</li>
+            </ol>
+        </div>
+    </div>
+
+    <section class="order-success-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="order-success-card bg-light p-4">
+                        <img style="max-width: 20%;"
+                            src="https://lirp.cdn-website.com/bbca9e7c/dms3rep/multi/opt/green-tick-icon-0-1000x1000-640w.png"
+                            alt="">
+                        <h2>Order Placed Successfully</h2>
+                        <p class="text-muted">Thank you. Your order has been received.</p>
+                        <a href="/orders?id=<%= UserDetails.id %>"><button class="btn btn-warning w-50">Go to
+                                Orders</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row py-4">
+                <div class="col-lg-6 col-md-6">
+                    <div class="order-info-card bg-light p-4">
+                        <h4>Order Info</h4>
+                        <ul class="order-info-list">
+                            <li>
+                                order number
+                                <span>: <%= order.Order_ID %></span>
+                            </li>
+
+                            <li>
+                                delivery Date
+                                <span>: <% var currentDate=new Date(); currentDate.setDate(currentDate.getDate() + 4);
+                                        function formatDate(date) { var day=date.getDate(); var month=date.getMonth() +
+                                        1; var year=date.getFullYear(); day=day < 10 ? '0' + day : day; month=month < 10
+                                        ? '0' + month : month; return `${day}-${month}-${year}`; } var
+                                        formattedDate=formatDate(currentDate); %>
+                                        <%= formattedDate %>
+                                </span>
+                            </li>
+                            <li>
+                                payment method
+                                <span>: <%= order.payment_method %></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="shipping-address-card bg-light p-4">
+                        <h4>Shipping Address</h4>
+                        <ul class="shipping-address-list">
+                            <li>
+                                Fullname
+                                <span>: <%= specifiedAddress.name %></span>
+                            </li>
+                            <li>
+                                Phone
+                                <span>: <%= specifiedAddress.mobile %></span>
+                            </li>
+                            <li>
+                                Address
+                                <span>: <%= specifiedAddress.address %></span>
+                            </li>
+                            <li>
+                                Pincode
+                                <span>: <%= specifiedAddress.pincode %></span>
+                            </li>
+                            <li>
+                                City
+                                <span>: <%= specifiedAddress.city %></span>
+                            </li>
+                            <li>
+                                state
+                                <span>: <%= specifiedAddress.state %></span>
+                            </li>
+                            <li>
+                                Address Type
+                                <span>: <%= specifiedAddress.addressType %></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="order-details-card bg-light p-4">
+                        <h3>Order Details</h3>
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col" colspan="2"><b>Product</b></th>
+                                    <th scope="col"><b>Quantity</b></th>
+                                    <th scope="col"><b>Total</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% cart.products.forEach(function(product) { %>
+                                    <tr>
+                                        <td colspan="2">
+                                            <%= product.productId.name %>
+                                        </td>
+                                        <td>x<%= product.quantity %></td>
+                                        <td class="item-total">
+                                            ₹<%= product.productId.price * product.quantity %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                                <tr>
+                                    <td colspan="3">Shipping Charges</td>
+                                    <td style="text-align: center;">
+                                        ₹<%= order.shipping_charge %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Discount</td>
+                                    <td style="text-align: center;">
+                                        ₹ -<%= cart.discount %>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th scope="col" colspan="3"><b>Total</b></th>
+                                    <% let total = cart.total + order.shipping_charge - cart.discount %>
+                                    <th style="text-align: center;">
+                                        <b>₹<%= total %></b>
+                                    </th>
+                                
+                                </tr>
+                            </tfoot>
+                        </table>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <%- include('../layouts/userFooter.ejs') %>

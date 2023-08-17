@@ -1,0 +1,133 @@
+<%- include('../layouts/adminHeader.ejs') %>
+<section class="content-main">
+    <form action="/admin/addBanner" enctype="multipart/form-data" method="post">
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Banner</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="mb-4">
+                                    <label class="form-label">Banner title</label>
+                                    <input type="text" placeholder="Type here" class="form-control" name="bannerName">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" rows="4"
+                                        name="bannerDescription"></textarea>
+                                </div>
+                                <hr class="mb-4 mt-0">
+                                <div class="col-lg-6">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h4>Media</h4>
+                                        </div>
+                                        <div class="input-upload">
+                                            <img src="/imgs/theme/upload.svg" id="imgView1" alt="">
+                                            <input class="form-control" id="input1" name="photo"
+                                                onchange="viewImage1(event),viewImage(event, 1)" type="file">
+                                        </div>
+                                        <div class="image-cropper" style="display:none;">
+                                            <img src="" id="croppedImg1" alt="">
+                                            <button type="button" id="saveButton1"
+                                                class="btn-sm btn-primary">Save</button>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-md rounded font-sm hover-up" type="submit">Publish</button>
+                <p style="margin-top: 10px;">
+                    <% if (typeof message !=='undefined' ) { %>
+                        <span id="message">
+                            <%= message %>
+                        </span>
+                        <% } %>
+                </p>
+            </div>
+        </section> 
+    </form>
+</section> 
+
+<script>
+    // Delay the display of the message by 3 seconds
+    setTimeout(function () {
+        const messageElement = document.getElementById('message');
+        if (messageElement) {
+            messageElement.style.display = 'none';
+        }
+    }, 3000);
+</script>
+
+<script>
+    function viewImage1(event) {
+        document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+    }
+
+</script>
+<script>
+    function viewImage(event, index) {
+        let input = event.target;
+        let reader = new FileReader();
+
+        reader.onload = function () {
+            let dataURL = reader.result;
+            let image = document.getElementById('imgView' + index);
+            image.src = dataURL;
+
+            // Initialize Cropper.js on the image
+            let cropper = new Cropper(image, {
+                aspectRatio: 1920 / 600, // Set the aspect ratio to match the banner dimensions
+                viewMode: 2, // Set the view mode to enable dragging the crop box for selecting the area
+                guides: true, // Show the crop guides
+                background: false, // Do not show the background behind the image
+                autoCropArea: 1, // Set the initial crop area to cover the whole image
+                zoomable: false // Disable zooming to keep the image size fixed for the banner
+            });
+
+
+            // Show the image cropper container
+            let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+            cropperContainer.style.display = 'block';
+
+            // Update the cropped image when the "Save" button is clicked
+            let saveButton = document.querySelector('#saveButton' + index);
+            saveButton.addEventListener('click', async function () {
+                let croppedCanvas = cropper.getCroppedCanvas({
+                    width: 1920,
+                    height: 600
+                });
+                let croppedImage = document.getElementById("croppedImg" + index);
+                croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+
+                // Generate a unique name for the cropped image file based on the current timestamp
+                let timestamp = new Date().getTime();
+                let fileName = `cropped-img-${timestamp}-${index}.png`;
+
+                await croppedCanvas.toBlob(blob => {
+                    let input = document.getElementById('input' + index)
+                    let imgFile = new File([blob], fileName, blob)
+                    const fileList = new DataTransfer();
+                    fileList.items.add(imgFile);
+                    input.files = fileList.files
+                });
+                // cropperContainer.style.display = 'none';
+            });
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
+
+<%- include('../layouts/adminFooter.ejs') %>

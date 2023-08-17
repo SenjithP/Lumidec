@@ -1,0 +1,332 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+	<!-- //header -->
+	<!-- navigation -->
+
+	<!-- //navigation -->
+	<!-- breadcrumbs -->
+	<div class="breadcrumbs">
+		<div class="container">
+			<ol class="breadcrumb breadcrumb1">
+				<li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+				<li class="active">Checkout Page</li>
+			</ol>
+		</div>
+	</div>
+	<!-- //breadcrumbs -->
+
+	<!-- checkout -->
+	<% if (!locals.products) { %>
+		<div class="snipcart-item block">
+			<div style="display: flex; justify-content: center;" class="snipcart-thumb">
+				<img style="width: 450px; height: 300px ;" src="./images/empty-cart.png">
+			</div>
+			<div class="snipcart-details top_brand_home_details">
+				<h3>Add items to your cart</h3>
+				<br>
+				<button
+					style="width: 300px; border-radius: 10px; font-weight: bold; letter-spacing: .7px; border: none; background-color: #fe9126; color: white;"
+					type="submit" name="submit" onclick="window.location.href='/shop'" class="button"
+					onmouseover="this.style.backgroundColor='orange'"
+					onmouseout="this.style.backgroundColor='#3399cc'">Go to Shop</button>
+			</div>
+		</div>
+		<% } else { %>
+
+
+			<div class="checkout" style="width: 100%; overflow-x: hidden;">
+				<div class="container">
+					<div id="divToUpdate">
+						<h4>Your shopping cart contains: <span>
+								<%= productCount %> Products
+							</span></h4>
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="checkout-left col-4">
+								<table class="timetable_sub">
+									<thead>
+										<tr>
+											<th>SL No.</th>
+											<th>Product</th>
+											<th>Product Name</th>
+											<th>Quantity</th>
+											<th>Price (₹)</th>
+											<th>Remove</th>
+										</tr>
+									</thead>
+									<% products.forEach(function(product,index) { %>
+										<tr class="rem1">
+											<td class="invert">
+												<%= index+1 %>
+											</td>
+											<td class="invert-image"><a href="single.html">
+													<img style="height: 100px; width: 100px;"
+														src="../product-images/<%= product.productId.images[0] %>"
+														alt=" " class="img-responsive" /></a></td>
+											<td class="invert">
+												<%= product.productId.name %>
+											</td>
+											<td class="invert">
+												<div class="quantity">
+													<div class="quantity-select">
+														<div class="entry value-minus "
+															id="decrement_<%= product.productId._id %>"
+															onclick="decrementQuantity('<%= product.productId._id %>')">
+															&nbsp;</div>
+														<div class="entry value"
+															id="quantity_<%= product.productId._id %>">
+															<span>
+																<%=product.quantity%>
+															</span>
+														</div>
+														<div class="entry value-plus active"
+															id="increment_<%= product.productId._id %>"
+															onclick="incrementQuantity('<%= product.productId._id %>')">
+															&nbsp;</div>
+													</div>
+													<div hidden class="remaining"
+														id="remains_<%= product.productId._id %>">
+														<span><%=(product.productId.quantity-product.quantity)%></span>
+													</div>
+												</div>
+											</td>
+											<td class="invert item-total"
+												id="product-total-price-<%= product.productId._id %>">
+												₹<%=product.quantity * product.productId.price%>
+											</td>
+											<td class="invert">
+												<div class="rem">
+													<a href="#"
+														onclick="handleDeleteClick(event, '<%= product.productId._id %>')">
+														<i class="fa-sharp fa-solid fa-trash fa-xl dicon"
+															style="color: #FFCCCB;"></i>
+													</a>
+												</div>
+											</td>
+										</tr>
+										<% }) %>
+								</table>
+							</div>
+						</div>
+
+						<div class="col-md-3 pdet">
+							<div class="container">
+								<form action="/checkout" method="get">
+									<table class="table thead-dark"
+										style="width: 100%; max-width: 400px; border-collapse: collapse;">
+										<thead class="thead-dark">
+											<tr>
+												<th colspan="2"
+													style="font-weight: bold; text-align: center; background-color: #fe9126; color: #ffffff;">
+													PRICE DETAILS
+												</th>
+											</tr>
+										</thead>
+										<tbody style="border: 1px solid gray;">
+											<tr>
+												<td style="text-align: center;">Total price (<%= productCount %> items):
+												</td>
+												<td style="text-align: center;" id="subtotal">rs</td>
+											</tr>
+											<tr>
+												<td style="text-align: center;">Discount:</td>
+												<td style="text-align: center;" id="disCount"
+													class="text-right text-danger ml-3"></td>
+											</tr>
+
+											<tr>
+												<td style="text-align: center;">Delivery charge:</td>
+												<td style="text-align: center; color: green;" id="deliveryCharge"></td>
+											</tr>
+
+
+											<tr>
+												<td style="text-align: center; font-weight: bold;">Total:</td>
+												<td style="text-align: center; font-weight: bold" id="toTotal"
+													class="text-right text-dark b ml-3"><strong></strong></td>
+											</tr>
+											<tr>
+												<th colspan="2"
+													style="font-weight: bold; text-align: center; background-color: #2693fe; color: #ffffff;">
+													<button id="checkoutButton"
+														style="background-color: #2693fe; border: none; font-weight: bold; color: #ffffff;"
+														class="btn btnn" type="submit">CHECKOUT</button>
+												</th>
+											</tr>
+										</tbody>
+									</table>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- CONFIRMATION MODAL -->
+			<div id="confirmationModal" class="modal">
+				<div class="modal-content">
+					<h2>Confirmation</h2>
+					<p>Are you sure you want to delete this item?</p>
+					<div class="button-container">
+						<button onclick="handleYesClick()" class="yes-button">Yes</button>
+						<button onclick="handleNoClick()" class="no-button">No</button>
+					</div>
+					<span class="close-button" onclick="handleNoClick()">&times;</span>
+				</div>
+			</div>
+			<!-- END OF CONFIRMATION MODAL -->
+			<% } %>
+				<!-- //checkout -->
+				<script>
+					const setSubtotal = () => {
+						const itemTotal = document.getElementsByClassName('item-total');
+						let subtotal = 0;
+
+						for (let i = 0; i < itemTotal.length; i++) {
+							const itemTotalValue = parseFloat(itemTotal[i].innerHTML.replace(/[^\d.]/g, ''));
+							subtotal += itemTotalValue;
+						}
+
+						let disCount = 0;
+						let toTotal = subtotal;
+
+						document.getElementById('subtotal').innerHTML = `₹ ${subtotal.toFixed(2)}`;
+						document.getElementById('disCount').innerHTML = `₹ ${disCount.toFixed(2)}`;
+						if (subtotal.toFixed(2) > 3000) {
+							document.getElementById('deliveryCharge').innerHTML = "Free";
+							document.getElementById('toTotal').innerHTML = `₹ ${toTotal.toFixed(2)}`;
+						} else {
+							document.getElementById('deliveryCharge').innerHTML = "₹ 100";
+							let toTotalValue = parseFloat(toTotal.toFixed(2));
+							let newValue = toTotalValue + 100;
+							document.getElementById('toTotal').innerHTML = `₹ ${newValue.toFixed(2)}`;
+						}
+					};
+
+
+
+					setSubtotal();
+
+					function incrementQuantity(cartId) {
+						let errtext = "Out of Stock"
+						const remain = document.getElementById(`remains_${cartId}`);
+
+						if (remain.innerText == 'out of stock' || remain.innerText == 0) {
+							Toastify({
+								text: `<i class="fa-solid fa-circle-exclamation fa-beat fa-xl"></i>   ${errtext}`,
+								duration: 3000,
+								className: "info",
+								gravity: "bottom",
+								position: "center",
+								style: {
+									background: "red",
+									border: "5px double black",
+									'border-color': "white",
+								},
+								escapeMarkup: false,
+							}).showToast();
+						} else {
+							fetch('/incrementQuantity', {
+								method: 'PATCH',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({ cartId: cartId }),
+							})
+								.then((response) => response.json())
+								.then((data) => {
+									if (data.success) {
+
+										document.getElementById(`product-total-price-${cartId}`).textContent = `₹ ${data.total}`;
+										document.getElementById(`quantity_${cartId}`).textContent = data?.quantity;
+										document.getElementById(`remains_${cartId}`).textContent = data?.mess;
+										setSubtotal();
+
+
+									} else {
+										console.log('error while updating');
+									}
+								})
+								.catch((error) => {
+									// Handle error here
+									console.log('Error:', error);
+								});
+						}
+					}
+
+					function decrementQuantity(cartItemId) {
+						var currentQuantity = parseInt($(`#quantity_${cartItemId}`).text());
+						if (currentQuantity > 1) {
+							fetch('/decrementQuantity', {
+								method: 'PATCH',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({ cartItemId: cartItemId }),
+							})
+								.then((response) => response.json())
+								.then((data) => {
+									document.getElementById(`product-total-price-${cartItemId}`).textContent = `₹ ${data.total}`;
+									document.getElementById(`quantity_${cartItemId}`).textContent = data?.quantity;
+									document.getElementById(`remains_${cartItemId}`).textContent = data?.mess;
+									setSubtotal();
+								})
+								.catch((error) => {
+									// Handle error here
+									console.log('Error:', error);
+								});
+						} else {
+							document.getElementById(`quantity_${cartItemId}`).textContent = 1;
+
+						}
+					}
+
+					//DELETE 
+					function handleDeleteClick(event, productId) {
+						event.preventDefault();
+						showModal(productId);
+					}
+					function showModal(productId) {
+						const modal = document.getElementById("confirmationModal");
+						modal.style.display = "block";
+						modal.setAttribute("data-productId", productId);
+					}
+					function handleYesClick() {
+						const modal = document.getElementById("confirmationModal");
+						const productId = modal.getAttribute("data-productId");
+
+						// Make a request to the server to delete the cart item
+						fetch(`/deleteCartItem/${productId}`, {
+							method: "DELETE",
+						})
+							.then((response) => {
+								if (response.ok) {
+									return response.json(); // Parse the response as JSON
+								} else {
+									throw new Error("Product not found in the cart.");
+								}
+							})
+							.then((data) => {
+								window.location.reload()
+								modal.style.display = "none"; // Hide the modal
+							})
+
+
+							.catch((error) => {
+								console.error(error);
+								alert("An error occurred while deleting the product.");
+							})
+							.finally(() => {
+								modal.style.display = "none";
+							});
+					}
+					function handleNoClick() {
+						const modal = document.getElementById("confirmationModal");
+						modal.style.display = "none";
+					}
+
+				</script>
+
+
+				<%- include('../layouts/userFooter.ejs') %>

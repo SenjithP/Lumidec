@@ -1,0 +1,106 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+        <section class="content-main">
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Coupon </h2>
+                        <p>Add, edit or Change Status</p>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                    </div>
+                </div>
+                <div class=" col-lg-6 card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form action="/admin/editCoupon" method="post">
+                                    <div class="mb-4">
+
+                                        <label for="product_name" class="form-label">Coupon Code</label>
+                                        <div style="display: flex;"><input type="text" placeholder="Type here"
+                                                class="form-control" id="couponInput" name="code" value="<%=coupon.couponCode%>" readonly />
+                                            <button class="btn btn-primary" id="generateButton"
+                                                style="padding: 5px;">Generate</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Discount in %</label>
+                                        <input type="number" placeholder="Type here" class="form-control" id="discount"
+                                            name="discount" value="<%=coupon.discount%>" required />
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Min Purchase Amount</label>
+                                        <input type="number" placeholder="Type here" class="form-control" id="min_purchase" name="min_purchase" value="<%=coupon.minPurchase%>" required />
+                                    </div>
+                                    
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Max Discount Amount</label>
+                                        <input type="number" placeholder="Type here" class="form-control"
+                                            id="max_discount" name="max_discount" value="<%=coupon.maxDiscount%>" required />
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="date" placeholder="Type here" class="form-control" id="expiry"
+                                            name="expiry" value="<%= new Date(coupon.expires).toISOString().split('T')[0] %>" required />
+                                    </div>
+
+                                    <input type="hidden" name="id" value="<%=coupon._id%>">
+
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Edit Coupon</button>
+                                        <p>
+                                            <%=(typeof msg!=='undefined' )?msg:""%>
+                                        </p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- .row // -->
+                    </div> <!-- card body .// -->
+                </div> <!-- card .// -->
+            </section> <!-- content-main end// -->
+
+
+
+
+
+        </section> <!-- content-main end// -->
+    
+
+    <!-- GENERATING COUPON -->
+    <script>
+        function generateRandomString(length) {
+            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let result = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                result += charset[randomIndex];
+            }
+            return result;
+        }
+        function couponGenHelper() {
+            let prefix = "Lumi-"
+            const randomPart = generateRandomString(7);
+            return prefix + randomPart
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            // Event listener for the "Generate Coupon" button
+            document.getElementById('generateButton').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                const couponInput = document.getElementById('couponInput');
+                const generatedCoupon = couponGenHelper();
+                couponInput.value = generatedCoupon;
+            });
+        });
+    </script>
+
+
+<%- include('../layouts/adminFooter.ejs') %>
+   

@@ -1,0 +1,106 @@
+<%- include('../layouts/adminHeader.ejs') %>
+    <section class="content-main">
+
+
+        <div class="table-responsive">
+            <h3>Reviews List</h3>
+            <br>
+            <table id="thisTable" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Product Name</th>
+                        <th>Rating</th>
+                        <th>Review</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% allReviews.forEach((review)=> { %>
+                        <tr>
+                            <td>
+                                <%= review.user.name %>
+                            </td>
+                            <td>
+                                <%= review.product.name %>
+                            </td>
+                            <td>
+                                <%= review.rating %>
+                            </td>
+                            <td>
+                                <%= review.review %>
+                            </td>
+
+
+                            <% if (review.isReported==false) { %>
+                                <td><span style="color: green;">Okey !!</span></td>
+                                <% } else { %>
+                                    <td><span style="color: red;">Reported</span></td>
+                                    <% } %>
+                                        <td>
+                                            <div style="display: flex;">
+                                                <% if(review.isReported==true){%>
+                                                    <form action="/admin/reviewUnreport/<%= review._id.toString() %>" method="post">
+                                                        <button class="text-success actionBtn" type="submit" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;">Unreport</button>
+                                                    </form>
+                                                    
+                                                    <form action="/admin/deleteComment/<%= review._id.toString() %>" method="post">
+                                                        <button class="text-danger actionBtn" type="submit" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;">Delete </button>
+                                                    </form>
+                                                    
+                                                    <% if (review.user.is_blocked==false) { %>
+                                                        <!-- Check if the user is blocked -->
+                                                        <a style="text-decoration: none;" href="/admin/blockUsers?id=<%= review.user._id %>">
+                                                            <i class="bx bx-trash me-1"></i> Block(User)
+                                                            <!-- Display the "Block" button -->
+                                                        </a>
+                                                        <% } else { %> <!-- If the user is not blocked -->
+                                                            <a style="text-decoration: none;color: rgb(155, 87, 3);" href="/admin/unBlockUsers?id=<%= review.user._id %>">
+                                                                <i class="bx bx-trash me-1"></i> Unblock(User)
+                                                                <!-- Display the "Unblock" button -->
+                                                            </a>
+                                                            <% } %>
+                                                  
+                                                    <%}else{%>
+                                                        <form action="/admin/deleteComment/<%= review._id.toString() %>" method="post">
+                                                            <button class="text-danger actionBtn" type="submit" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;">Delete </button>
+                                                        </form>
+                                                        
+                                                        <% if (review.user.is_blocked==false) { %>
+                                                            <!-- Check if the user is blocked -->
+                                                            <a style="text-decoration: none;" href="/admin/blockUsers?id=<%= review.user._id %>">
+                                                                <i class="bx bx-trash me-1"></i> Block(User)
+                                                                <!-- Display the "Block" button -->
+                                                            </a>
+                                                            <% } else { %> <!-- If the user is not blocked -->
+                                                                <a style="text-decoration: none;color: rgb(155, 87, 3);" href="/admin/unBlockUsers?id=<%= review.user._id %>">
+                                                                    <i  class="bx bx-trash me-1"></i> Unblock(User)
+                                                                    <!-- Display the "Unblock" button -->
+                                                                </a>
+                                                                <% } %>
+                                                        <%}%>
+                                            </div>
+        </div>
+        </td>
+        </tr>
+        <% }); %>
+            </tbody>
+            </table>
+            </div>
+
+    </section> <!-- content-main end// -->
+
+
+    <script>
+        $(document).ready(function () {
+            $.noConflict();
+            $('#thisTable').DataTable({
+                "paging": true,          // Enable pagination
+                "pageLength": 10,        // Number of rows per page
+                "lengthMenu": [10, 25, 50, 75, 100],  // Dropdown options for rows per page
+
+            });
+        });
+    </script>
+    <%- include('../layouts/adminFooter.ejs') %>

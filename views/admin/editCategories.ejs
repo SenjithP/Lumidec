@@ -1,0 +1,70 @@
+<%- include('../layouts/adminHeader.ejs') %>
+  <section class="content-main">
+    <div class="container mt-5">
+      <form id="updateForm" action="/admin/editCategory" method="put">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter your name" name="category"
+            value="<%=category.name%>">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" rows="3" placeholder="Enter a description"
+            name="description"><%=category.description%></textarea>
+        </div>
+        <input type="hidden" name="id" value="<%=category._id%>">
+
+        <button type="submit" id="submitCategoryButton" class="btn btn-primary">Submit</button>
+      </form>
+      <span id="error-messages" style="color: red; display: grid; justify-content: center;"></span>
+      <span id="success-messages" style="color: green; display: grid; justify-content: center;"></span>
+    </div>
+  </section> <!-- content-main end// -->
+  </section> <!-- content-main end// -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const form = document.getElementById('updateForm');
+      const submitButton = document.getElementById('submitCategoryButton');
+
+      submitButton.addEventListener('click', async () => {
+			event.preventDefault(); // Prevent form submission
+
+        try {
+          const formData = new FormData(form);
+          const id = formData.get('id');
+          const name = formData.get('category');
+          const description = formData.get('description');
+
+          const response = await fetch(`/admin/editCategory/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, name, description }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            document.getElementById('success-messages').textContent = data.message;
+            setTimeout(function () {
+              document.getElementById('success-messages').textContent = '';
+            }, 3000);
+            // Handle success, maybe redirect or show a success message
+          } else {
+            document.getElementById('error-messages').textContent = data.message;
+            setTimeout(function () {
+              document.getElementById('error-messages').textContent = '';
+            }, 3000);
+            // Handle error, maybe display an error message
+          }
+        } catch (error) {
+          console.error('An error occurred', error);
+        }
+      });
+    });
+  </script>
+
+  <%- include('../layouts/adminFooter.ejs') %>

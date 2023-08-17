@@ -1,0 +1,254 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+
+	<!-- //navigation -->
+	<!-- breadcrumbs -->
+	<div class="breadcrumbs">
+		<div class="container">
+			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+				<li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+				<li class="active">Register Page</li>
+			</ol>
+		</div>
+	</div>
+	<!-- //breadcrumbs -->
+	<!-- register -->
+	<div class="register">
+		<div class="container">
+			<h2>Register Here</h2>
+			<div class="login-form-grids">
+				<form action="/register" method="post">
+					<input type="text" placeholder="Your Name" name="name">
+					<br>
+					<input type="email" placeholder="Your Email Address" name="email">
+					<br>
+					<div style="display: grid; grid-template-columns: 1fr auto;">
+						<input type="text" placeholder="Your Mobile Number" name="mobile">
+						<button style="color: white; background-color: #fe9126; border: none; padding: 10px 28px;" type="submit" class="register1" id="sendOtpBtn">Send OTP</button>
+					</div>
+					<br>
+					<div style="display: grid; grid-template-columns: 1fr auto;">
+						<input type="text" placeholder="Otp" name="otp">
+						<button style="color: white; background-color: #fe9126; border: none; padding: 10px 25px;" type="submit" class="register2" id="verifyOtpBtn">Verify OTP</button>
+					</div>
+					<br>
+					<div style="display: grid; grid-template-columns: 1fr auto;">
+						<input type="text" placeholder="Referal Id" name="referalId">
+						<button style="color: white; background-color: #fe9126; border: none; padding: 10px 43px;" type="submit" class="register3" id="verifyreferalBtn">Verify </button>
+					</div>
+					<input type="password" placeholder="Password" name="password">
+					<input type="password" placeholder="Password Confirmation" name="confirmPassword">
+					<span id="error-message" style="color: red; display: grid; justify-content: center;"></span>
+					<span id="success-message" style="color: green; display: grid; justify-content: center;"></span>
+					<input type="submit" id="registerBtn" value="Register">
+				</form>
+				<br>
+
+			</div>
+			<div class="register-home">
+				<a href="/login">Login</a>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- SEND OTP  -->
+	<script>
+		document.getElementById('sendOtpBtn').addEventListener('click', async () => {
+			event.preventDefault(); // Prevent form submission
+			const mobile = document.querySelector('input[name="mobile"]').value;
+
+			try {
+				const response = await fetch('/sendOTP', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ mobile })
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+					// Handle successful response
+					var button = document.querySelector('button.register1#sendOtpBtn');
+					button.disabled = true;
+					button.innerHTML = 'Resend';
+					button.style.padding = '5px 21px'
+					button.style.backgroundColor = 'green';
+					button.style.color = 'white';
+
+					// Start the 15-second timer
+					var timeLeft = 15;
+					updateTimer();
+
+					var timer = setInterval(function () {
+						timeLeft--;
+						updateTimer();
+
+						if (timeLeft === 0) {
+							clearInterval(timer);
+							button.innerHTML = 'Resend OTP';
+							button.disabled = false;
+						}
+					}, 1000);
+
+					function updateTimer() {
+						var formattedTime = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+						button.innerHTML = 'Resend (' + formattedTime + 's)';
+					}
+					document.getElementById('success-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('success-message').textContent = '';
+					}, 3000);
+				} else {
+					// Handle error response
+					document.getElementById('error-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('error-message').textContent = '';
+					}, 3000);
+				}
+			} catch (error) {
+				console.log('An error occurred:', error.message);
+			}
+		});
+	</script>
+
+
+	<!-- VERIFY OTP -->
+	<script>
+		document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
+			event.preventDefault(); // Prevent form submission
+			const otp = document.querySelector('input[name="otp"]').value;
+
+			try {
+				const response = await fetch('/verifyOTP', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ otp })
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+					// Handle successful response
+					var otpbutton = document.querySelector('button.register1#sendOtpBtn');
+					otpbutton.style.display = 'none';
+
+					var button = document.querySelector('button.register2#verifyOtpBtn');
+					button.disabled = true;
+					button.innerHTML = 'Verified';
+					button.style.padding = '5px 21px'
+					button.style.backgroundColor = 'green';
+					button.style.color = 'white';
+
+
+					document.getElementById('success-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('success-message').textContent = '';
+					}, 3000);
+				} else {
+					// Handle error response
+					document.getElementById('error-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('error-message').textContent = '';
+					}, 3000);
+				}
+			} catch (error) {
+				console.log('An error occurred:', error.message);
+			}
+		});
+	</script>
+
+	<!-- VERIFY REFERALID -->
+	<script>
+		document.getElementById('verifyreferalBtn').addEventListener('click', async () => {
+			event.preventDefault(); // Prevent form submission
+			const referalId = document.querySelector('input[name="referalId"]').value;
+
+			try {
+				const response = await fetch('/verifyreferalId', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ referalId })
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+					// Handle successful response
+					var button = document.querySelector('button.register3#verifyreferalBtn');
+					button.disabled = true;
+					button.innerHTML = 'Verified';
+					button.style.padding = '5px 21px'
+					button.style.backgroundColor = 'green';
+					button.style.color = 'white';
+
+
+					document.getElementById('success-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('success-message').textContent = '';
+					}, 3000);
+				} else {
+					// Handle error response
+					document.getElementById('error-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('error-message').textContent = '';
+					}, 3000);
+				}
+			} catch (error) {
+				console.log('An error occurred:', error.message);
+			}
+		});
+	</script>
+
+	<!-- REGISTERING USER -->
+	<script>
+		document.getElementById('registerBtn').addEventListener('click', async () => {
+			event.preventDefault(); // Prevent form submission
+			const name = document.querySelector('input[name="name"]').value;
+			const email = document.querySelector('input[name="email"]').value;
+			const mobile = document.querySelector('input[name="mobile"]').value;
+			const otp = document.querySelector('input[name="otp"]').value;
+			const referalId = document.querySelector('input[name="referalId"]').value;
+			const password = document.querySelector('input[name="password"]').value;
+			const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+
+			try {
+				const response = await fetch('/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ name, email, mobile, otp, password, confirmPassword, referalId })
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+
+					// Handle successful response
+					document.getElementById('success-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('success-message').textContent = '';
+						window.location.href = '/login';
+					}, 2000);
+
+				} else {
+					// Handle error response
+					document.getElementById('error-message').textContent = data.message;
+					setTimeout(function () {
+						document.getElementById('error-message').textContent = '';
+					}, 3000);
+				}
+			} catch (error) {
+				console.log('An error occurred:', error.message);
+			}
+		});
+	</script>
+
+	<%- include('../layouts/userFooter.ejs') %>

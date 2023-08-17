@@ -1,0 +1,460 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+
+	<!-- START BANNER -->
+
+	<ul id="demo1">
+		<% banners.forEach(function(banner) { %>
+			<li>
+				<img src="../product-images/<%=banner.photo%>" alt="" />
+				<!--Slider Description example-->
+				<div class="slide-desc">
+					<h3 style="color: black;">
+						<%= banner.description%>
+					</h3>
+					<a href="/shop"><input
+							style="border-radius: 10px; margin-left: 50px;padding: 10px 20px; color: aliceblue; background: #fe9126; border: wheat; "
+							type="button" value="Shop Now"></a>
+				</div>
+			</li>
+			<% }); %>
+
+	</ul>
+
+	<!-- END BANNER -->
+
+
+
+	<!-- TOP-BRANDS -->
+	<div class="top-brands">
+		<div class="container">
+			<h2>Shop Our Exclusive Selection</h2>
+			<div class="grid_3 grid_5">
+				<div style="border: 1px solid gray;" class="bs-example bs-example-tabs" role="tabpanel"
+					data-example-id="togglable-tabs">
+					<ul id="myTab" class="nav nav-tabs" role="tablist">
+						<li style="width: 100%;" role="presentation" class="active"><a href="#expeditions" id="expeditions-tab" role="tab"
+								data-toggle="tab" aria-controls="expeditions" aria-expanded="true">New Arrivals</a></li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+						<div role="tabpanel" class="tab-pane fade in active" id="expeditions"
+							aria-labelledby="expeditions-tab">
+							<div class="agile-tp">
+								<h5 class="w3l-ad">"Discover Our Exciting New Arrivals and Score Great Deals All in One
+									Place!".</h5>
+							</div>
+							<% for (let i=0; i < product.length; i +=4) { %>
+								<div class="agile_top_brands_grids">
+									<% for (let j=i; j < i + 4&& j < product.length; j++) { %>
+										<% if (product[j].is_listed) { %>
+											<div class=" col-md-3 top_brand_left">
+												<div class="hover14 column">
+													<div class="agile_top_brand_left_grid">
+														<div style="display: flex; justify-content: flex-end;">
+															<form id="addToWishList_<%= product[j]._id %>"
+																action="/wishlist" method="post">
+																<% if (locals.user) { %>
+																	<input type="hidden" name="productIds"
+																		value="<%= product[j]._id %>">
+																	<button
+																		style="margin-left: 160px; background-color: white; border: none;"
+																		id="wishlist_<%= product[j]._id %>"
+																		type="submit" name="submit"
+																		class="wishlistButtons"><i
+																			class="fa-solid fa-heart fa-lg"
+																			style="color: #fe9126;"></i></button>
+																	<% } else { %>
+																		<button
+																			style="margin-left: 160px; background-color: white; border: none;"
+																			id="wishlist_<%= product[j]._id %>"
+																			type="button"
+																			onclick="alert('You need to login first!')"
+																			name="submit" class="wishlistButtons"><i
+																				class="fa-solid fa-heart fa-lg"
+																				style="color: #fe9126;"></i></button>
+																		<% } %>
+															</form>
+
+														</div>
+														<div class="agile_top_brand_left_grid1">
+															<figure>
+																<div class="snipcart-item block">
+																	<div class="snipcart-thumb">
+																		<a href="/single?id=<%=product[j]._id %>">
+																			<img style="width: 150px; height: 150px;"
+																				title=" " alt=" "
+																				src="../product-images/<%= product[j].images[0] %>"></a>
+																		<p>
+																			<%= product[j].name %>
+																		</p>
+																		<h4>
+																			<%= `₹${product[j].price}` %>
+																				<span>₹10000</span>
+																		</h4>
+																	</div>
+																	<div
+																		class="snipcart-details top_brand_home_details">
+																		<form action="/home" method="post"
+																			id="addToCartForm_<%= product[j]._id %>">
+																			<fieldset>
+																				<input type="hidden" name="cmd"
+																					value="_cart">
+																				<input type="hidden" name="add"
+																					value="1">
+																				<input type="hidden" name="business"
+																					value=" ">
+																				<input type="hidden" name="item_name"
+																					value="<%= product[j].name %>">
+																				<input type="hidden" name="amount"
+																					value="35.99">
+																				<input type="hidden"
+																					name="discount_amount" value="1.00">
+																				<input type="hidden"
+																					name="currency_code" value="USD">
+																				<input type="hidden" name="return"
+																					value=" ">
+																				<input type="hidden"
+																					name="cancel_return" value=" ">
+																				<% if (locals.user) { %>
+																					<input type="hidden"
+																						name="productId"
+																						value="<%= product[j]._id %>">
+																					<button
+																						id="cartBtn_<%= product[j]._id %>"
+																						type="submit" name="submit"
+																						class="cartButtons">Add to
+																						cart</button>
+
+																					<a href="/cart"><button style="background-color: green;    font-size: 14px;
+																							padding: 7px 0; width: 100%; text-decoration: none; 
+																							text-transform: uppercase; color: white; border: none;" hidden id="goToCartBtn_<%= product[j]._id %>"
+																							type="button" name="submit"
+																							class="goToCartBtnS">Go to
+																							cart</button></a>
+
+																					<% } else { %>
+																						<button
+																							id="cartBtn_<%= product[j]._id %>"
+																							type="button"
+																							onclick="alert('You need to login first!')"
+																							name="submit"
+																							class="cartButtons">Add to
+																							cart</button>
+
+																						<a href="/cart"><button style="background-color: green;    font-size: 14px;
+																								padding: 7px 0; width: 100%; text-decoration: none; 
+																								text-transform: uppercase; color: white; border: none;" hidden id="goToCartBtn_<%= product[j]._id %>"
+																								type="button"
+																								name="submit"
+																								class="goToCartBtnS">Go
+																								to
+																								cart</button></a>
+
+																						<% } %>
+
+																			</fieldset>
+																		</form>
+																	</div>
+																	<div id="message_<%= product[j]._id %>"
+																		class="message"
+																		style="display: none; color: green;"></div>
+																</div>
+															</figure>
+														</div>
+													</div>
+												</div>
+											</div>
+											<% } %>
+												<% } %>
+													<div class="clearfix"></div>
+								</div>
+								<% } %>
+						</div>
+				
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- END TOP-BRANDS -->
+
+
+	<!--Banner (single Image)-->
+	<div>
+		<img src="images/bannerOne.png" alt="Example" style="width: 100%; height: 100%; object-fit: cover;">
+	</div>
+
+	<!-- Carousel
+    ================================================== -->
+	<div class="top-brands">
+		<div class="container">
+			<h2>Top Picks by Customers</h2>
+			<div class="grid_3 grid_5">
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					<!-- Indicators -->
+					<ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						<li data-target="#myCarousel" data-slide-to="1"></li>
+						<li data-target="#myCarousel" data-slide-to="2"></li>
+					</ol>
+					<div class="carousel-inner" role="listbox">
+						<% var chunkSize=4; %>
+							<% for (var i=0; i < productDetails.length; i +=chunkSize) { %>
+								<div class="item <%= i === 0 ? 'active' : '' %>">
+									<div class="topBrands">
+										<div class="row">
+											<% for (var j=i; j < Math.min(i + chunkSize, productDetails.length); j++) {
+												%>
+												<div class="col-md-3 top_brand_left">
+													<div class="hover14 column">
+														<div class="agile_top_brand_left_grid">
+															<div style="display: flex; justify-content: flex-end;">
+																<form id="addToWishList_<%= productDetails[j]._id %>"
+																	action="/wishlist" method="post">
+																	<% if (locals.user) { %>
+																		<input type="hidden" name="productIds"
+																			value="<%= productDetails[j]._id %>">
+																		<button
+																			style="margin-left: 160px; background-color: white; border: none;"
+																			id="wishlist_<%= productDetails[j]._id %>"
+																			type="submit" name="submit"
+																			class="wishlistButtons">
+																			<i class="fa-solid fa-heart fa-lg"
+																				style="color: #fe9126;"></i>
+																		</button>
+																		<% } else { %>
+																			<button
+																				style="margin-left: 160px; background-color: white; border: none;"
+																				id="wishlist_<%= productDetails[j]._id %>"
+																				type="button"
+																				onclick="alert('You need to login first!')"
+																				name="submit" class="wishlistButtons">
+																				<i class="fa-solid fa-heart fa-lg"
+																					style="color: #fe9126;"></i>
+																			</button>
+																			<% } %>
+																</form>
+															</div>
+															<div class="agile_top_brand_left_grid1">
+																<figure>
+																	<div class="snipcart-item block">
+																		<div class="snipcart-thumb">
+																			<a
+																				href="/single?id=<%= productDetails[j]._id %>">
+																				<img style="width: 150px; height: 150px;"
+																					title="<%= productDetails[j].name %>"
+																					alt="<%= productDetails[j].name %>"
+																					src="../product-images/<%= productDetails[j].images[0] %>">
+																			</a>
+																			<p>
+																				<%= productDetails[j].name %>
+																			</p>
+																			<h4>
+																				<%= `₹${productDetails[j].price}` %>
+																					<span>₹10000</span>
+																			</h4>
+																		</div>
+																		<div
+																			class="snipcart-details top_brand_home_details">
+																			<form action="/home" method="post"
+																				id="addToCartForm_<%= productDetails[j]._id %>">
+																				<fieldset>
+																					<input type="hidden" name="cmd"
+																						value="_cart">
+																					<input type="hidden" name="add"
+																						value="1">
+																					<input type="hidden" name="business"
+																						value=" ">
+																					<input type="hidden"
+																						name="item_name"
+																						value="<%= productDetails[j].name %>">
+																					<input type="hidden" name="amount"
+																						value="35.99">
+																					<input type="hidden"
+																						name="discount_amount"
+																						value="1.00">
+																					<input type="hidden"
+																						name="currency_code"
+																						value="USD">
+																					<input type="hidden" name="return"
+																						value=" ">
+																					<input type="hidden"
+																						name="cancel_return" value=" ">
+																					<% if (locals.user) { %>
+																						<input type="hidden"
+																							name="productId"
+																							value="<%= productDetails[j]._id %>">
+																						<button
+																							id="cartBtn_<%= productDetails[j]._id %>"
+																							type="submit" name="submit"
+																							class="cartButtons">Add to
+																							cart</button>
+																						<a href="/cart">
+																							<button
+																								style="background-color: green; font-size: 14px; padding: 7px 0; width: 100%; text-decoration: none; text-transform: uppercase; color: white; border: none;"
+																								hidden
+																								id="goToCartBtn_<%= productDetails[j]._id %>"
+																								type="button"
+																								name="submit"
+																								class="goToCartBtnS">Go
+																								to cart</button>
+																						</a>
+																						<% } else { %>
+																							<button
+																								id="cartBtn_<%= productDetails[j]._id %>"
+																								type="button"
+																								onclick="alert('You need to login first!')"
+																								name="submit"
+																								class="cartButtons">Add
+																								to cart</button>
+																							<a href="/cart">
+																								<button
+																									style="background-color: green; font-size: 14px; padding: 7px 0; width: 100%; text-decoration: none; text-transform: uppercase; color: white; border: none;"
+																									hidden
+																									id="goToCartBtn_<%= productDetails[j]._id %>"
+																									type="button"
+																									name="submit"
+																									class="goToCartBtnS">Go
+																									to cart</button>
+																							</a>
+																							<% } %>
+																				</fieldset>
+																			</form>
+																		</div>
+																		<div id="message_<%= productDetails[j]._id %>"
+																			class="message"
+																			style="display: none; color: green;"></div>
+																	</div>
+																</figure>
+															</div>
+														</div>
+													</div>
+												</div>
+												<% } %>
+										</div>
+									</div>
+								</div>
+								<% } %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- /.carousel -->
+
+	<script>
+		<% for (let j = 0; j < product.length; j++) { %>
+			document.getElementById('addToCartForm_<%= product[j]._id %>').addEventListener('submit', async (event) => {
+				console.log("test");
+				event.preventDefault(); // Prevent form submission
+				const productId = document.querySelector('#addToCartForm_<%= product[j]._id %> input[name="productId"]').value;
+				try {
+					const response = await fetch(`/addToCart/${productId}`, {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					const data = await response.json();
+					if (response.ok) {
+						var addButton = document.getElementById('cartBtn_<%= product[j]._id %>');
+						var goToCartButton = document.getElementById('goToCartBtn_<%= product[j]._id %>');
+						addButton.style.display = 'none'; // Hide the "Add to cart" button
+						goToCartButton.style.display = 'block'; // Show the "Go to cart" button
+
+						Toastify({
+							text: `<i class="fa-sharp fa-solid fa-circle-check fa-bounce fa-xl"></i>   ${data.message}`,
+							duration: 3000,
+							className: "info",
+							gravity: "bottom",
+							position: "center",
+							style: {
+								background: "green",
+								border: "5px double black",
+								'border-color': "white",
+							},
+							escapeMarkup: false, // Disable HTML escaping
+						}).showToast();
+					} else {
+						Toastify({
+							text: `<i class="fa-solid fa-circle-exclamation fa-beat fa-xl"></i>   ${data.message}`,
+							duration: 3000,
+							className: "info",
+							gravity: "bottom",
+							position: "center",
+							style: {
+								background: "red",
+								border: "5px double black",
+								'border-color': "white",
+							},
+							escapeMarkup: false, // Disable HTML escaping
+						}).showToast();
+					}
+					// Remove the event listener after successful response
+					document.getElementById('addToCartForm_<%= product[j]._id %>').removeEventListener('submit', arguments.callee);
+				} catch (error) {
+					console.log(error.message);
+				}
+			});
+	 <% } %>
+	</script>
+
+
+	<script>
+		<% for (let j = 0; j < product.length; j++) { %>
+			document.getElementById('addToWishList_<%= product[j]._id %>').addEventListener('submit', async (event) => {
+				event.preventDefault(); // Prevent form submission
+				const productId = document.querySelector('#addToWishList_<%= product[j]._id %> input[name="productIds"]').value;
+				try {
+					const response = await fetch(`/addToWishlist/${productId}`, {
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					const data = await response.json();
+					if (response.ok) {
+						var button = document.getElementById('wishlist_<%= product[j]._id %>');
+						button.disabled = true;
+						button.querySelector('i.fa-heart').style.color = 'green';
+
+						Toastify({
+							text: `<i class="fa-sharp fa-solid fa-circle-check fa-bounce fa-xl"></i>   ${data.message}`,
+							duration: 3000,
+							className: "info",
+							gravity: "bottom",
+							position: "center",
+							style: {
+								background: "green",
+								border: "5px double black",
+								'border-color': "white",
+							},
+							escapeMarkup: false, // Disable HTML escaping
+						}).showToast();
+					} else {
+						Toastify({
+							text: `<i class="fa-solid fa-circle-exclamation fa-beat fa-xl"></i>   ${data.message}`,
+							duration: 3000,
+							className: "info",
+							gravity: "bottom",
+							position: "center",
+							style: {
+								background: "red",
+								border: "5px double black",
+								'border-color': "white",
+							},
+							escapeMarkup: false, // Disable HTML escaping
+						}).showToast();
+					}
+					// Remove the event listener after successful response
+					document.getElementById('addToWishList_<%= product[j]._id %>').removeEventListener('submit', arguments.callee);
+				} catch (error) {
+					console.log(error.message);
+				}
+			});
+	<% } %>
+	</script>
+	<%- include('../layouts/userFooter.ejs') %>

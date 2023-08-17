@@ -1,0 +1,121 @@
+<%- include('../layouts/adminHeader.ejs') %>
+
+<section class="content-main">
+
+    <div class="table-responsive">
+        <h3>Orders List</h3>
+        <br>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>date</th>
+                    <th>Product Name</th>
+                    <th>quantity</th>
+                    <th>total</th>
+                    <th>Image</th>
+                    <th>status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% order_data.forEach((orders, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= orders.user.name %></td>
+                        <td><%= orders.createdAt.toLocaleDateString() %></td>
+                        <td>
+                            <ul>
+                                <% orders.items.forEach((items) => { %>
+                                    <li><%= items.product.name %></li>
+                                <% }) %>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <% orders.items.forEach((items) => { %>
+                                    <li style="list-style: none;"><%= items.quantity %></li>
+                                <% }) %>
+                            </ul>
+                        </td>
+                        <td>₹<%= orders.total %></td>
+                        <td>
+                            <% orders.items.forEach((items) => { %>
+                                <% if (items.product.images && items.product.images.length > 0) { %>
+                                    <img src="../product-images/<%= items.product.images[0] %>"
+                                        class="img-thumbnail" width="40px" alt="vfdv">
+                                <% } %>
+                            <% }) %>
+                        </td>
+                        <td><%= orders.status %>
+                            <div>
+                                <a type="submit" href="/orderdetail/<%= orders._id %>"
+                                    class="btn btn-light">Details</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" id="editDropdownToggle" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                        class="fas fa-pencil-alt"></i>Edit</a>
+                                <div class="dropdown-menu bg-transparent border-0"
+                                    aria-labelledby="editDropdownToggle">
+                                    <form action="/admin/orderUpdate/<%= orders._id %>" method="post">
+                                        <div style="display: flex; ">
+                                            <select name="status">
+                                                <option value="Pending" <% if (orders.status==='Pending' ) { %> selected <% } %>>Pending</option>
+                                                <option value="Shipped" <% if (orders.status==='Shipped' ) { %> selected <% } %>>Shipped</option>
+                                                <option value="Delivered" <% if (orders.status==='Delivered' ) { %> selected <% } %>>Delivered</option>
+                                                <option value="cancelled" <% if (orders.status==='Cancelled' ) { %> selected <% } %>>Cancel</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <% if (orders.payment_method == "COD") { %>
+                                <% if (orders.status === "Returned") { %>
+                                    <div>
+                                        <form action="/admin/orderRefund?id=<%= orders._id %>" method="post">
+                                            <button type="submit" value="Refunded"
+                                                class="btn btn-danger">Refund</button>
+                                        </form>
+                                    </div>
+                                <% } %>
+                            <% } else if (orders.payment_method == "Paypal" || orders.payment_method == "WALLET") { %>
+                                <% if (orders.status === "cancelled" || orders.status === "Returned") { %>
+                                    <div>
+                                        <form action="/orderRefund?id=<%= orders._id %>" method="post">
+                                            <button type="submit" value="Refunded"
+                                                class="btn btn-danger">Refund</button>
+                                        </form>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<script>
+    // Ensure you have included the required Bootstrap JS library before this script.
+
+    // Close the dropdown when clicking outside of it
+    document.addEventListener('click', function (event) {
+        const dropdownToggle = document.getElementById('editDropdownToggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        if (!dropdownMenu.contains(event.target) && !dropdownToggle.contains(event.target)) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+</script>
+
+<%- include('../layouts/adminFooter.ejs') %>

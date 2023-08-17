@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>~Lumidec~</title>
+    <link rel="icon" type="image/x-icon" href="/images/logocropped.png">
+    <!-- for-mobile-apps -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Super Market Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //for-mobile-apps -->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- font-awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-<insert-integrity-hash>" crossorigin="anonymous" />
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- //font-awesome icons -->
+
+    <!--// Toast-->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
+    <!-- js -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <!-- //js -->
+    <link
+        href='//fonts.googleapis.com/css?family=Raleway:400,100,100italic,200,200italic,300,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+    <link
+        href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'
+        rel='stylesheet' type='text/css'>
+    <!-- start-smoth-scrolling -->
+    <script type="text/javascript" src="js/move-top.js"></script>
+    <script type="text/javascript" src="js/easing.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+            });
+        });
+    </script>
+    <!-- start-smoth-scrolling -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+    <!-- header -->
+    <div class="agileits_header">
+        <div class="container">
+            <div class="w3l_offers">
+                <p>Many Coupon Offers Available . Grab it Fast . <a href="/shop">SHOP NOW</a></p>
+            </div>
+            <div class="agile-login">
+                <ul>
+                    <li> <a href="/home">Home</a></li>
+                    <li> <a href="/shop">Shop</a></li>
+
+                    <% if (locals.user) { %>
+                        <li> <a href="/orders">Orders</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                        <li> <a href="/profile?id=<%= locals.user.id %>">Welcome, <%= locals.user.name%></a></li>
+
+
+                        <% } else { %>
+                            <li><a href="/register"> Create Account </a></li>
+                            <li><a href="/login">Login</a></li>
+                            <% } %>
+
+
+                </ul>
+            </div>
+            <div class="product_list_header">
+                <button class="w3view-cart" type="submit" name="submit" value=""><a href="/cart"><i
+                            class="fa fa-cart-arrow-down" aria-hidden="true"></i></a></button>
+                <button class="w3view-cart" type="submit" name="submit" value=""><a href="/wishlist"><i
+                            class="fa-solid fa-heart fa-lg" style="color: #fe9126;"></i></a></button>
+
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+
+    <div class="logo_products">
+        <div class="container">
+            <div class="w3ls_logo_products_left1">
+                <ul class="phone_email">
+                    <li><i class="fa fa-phone" aria-hidden="true"></i>Order online or call us : +91-9854717456</li>
+
+                </ul>
+            </div>
+            <div class="w3ls_logo_products_left">
+                <h1><a href="/home">~Lumidec~</a></h1>
+            </div>
+            <div class="w3l_search">
+
+                <form id="searchForm" action="/searchProduct" method="get">
+                    <div style="display: flex; justify-content: space-between;">
+                        <input type="text" name="product" id="searchInput" placeholder="Search for a Product..."
+                            required="">
+                        <button type="submit" id="submitButton" class="btn btn-default search" aria-label="Left Align">
+                            <i class="fa fa-search" aria-hidden="true"> </i>
+                        </button>
+                        <button class="btn btn-success" id="startButton"><i class="fa-solid fa-microphone fa-bounce fa-xl" style="color: #83f05c;"></i></button>
+                    </div>
+                    <% if (locals.message) { %>
+                        <div style="width: 270px;" id="msgg" class="alert alert-success"><%- locals.message %></div>
+                        <% } %>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!-- //header -->
+
+
+    <!-- ticker -->
+    <div class="navigation-agileits">
+        <div class="ticker-content">
+            <p>Illuminate your home with the assurance of guaranteed lights, providing the lowest prices, unbeatable
+                service, top-notch quality products, and irresistible offers. Elevate your ambiance with our exquisite
+                collection of decorative and fancy lights, exclusively available for you on ~Lumidec~.</p>
+        </div>
+    </div>
+    <!-- ticker -->

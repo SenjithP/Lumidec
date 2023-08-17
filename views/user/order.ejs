@@ -1,0 +1,151 @@
+<%- include('../layouts/userHeader.ejs') %>
+
+        <!-- //navigation -->
+        <!-- breadcrumbs -->
+        <div class="breadcrumbs">
+            <div class="container">
+                <ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+                    <li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+                    <li class="active">Order success</li>
+                </ol>
+            </div>
+        </div>
+
+        <% if (locals.order_data) { %>
+            <div class="col-12">
+                <div class="bg-secondary orderround rounded h-100 p-4">
+                    <h3 class="mb-4">Order history</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="orderhead">
+                                <tr>
+                                    <th scope="col">No:</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">quantity</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">status</th>
+                                    <th scope="col">Details</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Refund</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody class="ordertable">
+                                <% order_data.forEach((orders,index) =>{ %>
+                                <tr>
+                                    
+                                    <td><%= index+1 %></td>
+        
+                                    <td><%= orders.createdAt.toLocaleDateString() %></td>
+        
+                                    <td><% orders.items.forEach((items,index) =>{ %>
+        
+                                        <%= index+1 %>. <%= items.product.name %> <br>
+                                       <% }) %>
+                                    </td>
+        
+                                    <td><% orders.items.forEach((items) =>{ %>
+        
+                                        <%= items.quantity %> <br>
+                                       <% }) %>
+                                    </td>
+                                    
+                                    <td>₹<%= orders.total%></td>
+        
+                                    <td>
+                                        <% orders.items.forEach((items) =>{ %>
+                                          <img src="/<%= items.product.photo[0] %>" class="img-thumbnail" width="60px" alt=""> <br>
+                                        <% }) %>
+                                    <td>
+                                        <%= orders.status%>
+                                    </td>
+                                    <td> <div>
+                                                            
+                                        <a type="submit" href="/order_detail/<%= orders._id %>" class="btn btn-light">Details</a>
+                                    </div></td>
+                                    <td>
+                                        <%	if (orders.status==="cancelled") {%> 
+                                            <%= orders.status%>
+                                            <% }else if(orders.status==="Returned"|| orders.status==="Refunded" || orders.status==="Delivered" ){ %>
+                                                <%= orders.status%>
+                                            <% }else { %>
+                                                <button type="button" onclick="canopenPopup()"class="btn btn-danger">Cancel</button>
+                                                
+                                                <div id="cepopup" class="rpopup">
+                                                  <span class="rclose" onclick="canclosePopup()">&times;</span>
+                                                  <div>
+                                                    <form action="/order_cancel/<%= orders._id %>" method="post">
+                                                        <input type="text" name="reason" required>
+                                                          <button type="submit" value="cancelled" class="btn btn-danger">Cancel</button>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                        <% } %>	
+                                    </td>
+                                    <td>
+        
+                                            <%	if (orders.status==="Delivered") {%> 
+        
+                                                <button type="button" onclick="openPopup()"class="btn btn-danger">Return</button>
+                                                
+                                             <div id="repopup" class="rpopup">
+                                               <span class="rclose" onclick="closePopup()">&times;</span>
+                                               <div>
+                                                <form action="/order_Return/<%= orders._id %>" method="post">
+                                                    <input type="text" name="reason" required>
+                                                      <button type="submit" value="Return" class="btn btn-danger">Return</button>
+                                                </form>
+                                            </div>
+                                             </div>
+        
+                                       
+        
+        
+                                        <% } %>	
+                                    </td>
+                                    
+                                  </tr>
+                                  <% }) %>
+                    
+        
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        
+            <% } else { %>
+                <div class="container-fluid  mt-100">
+                    <div class="row">
+                    
+                       <div class="col-md-12">
+                       
+                               <div class="card">
+                           <div class="card-header">
+                           
+                           </div>
+                           <div class="card-body cart">
+                                   <div class="col-sm-12 empty-cart-cls text-center">
+                                       <img src="https://i.pinimg.com/564x/6f/fd/64/6ffd64c5366898c59bbc91d9aec935c3.jpg"  width="130px" height="130px" class="img-fluid cart_img mb-4 mr-3">
+                                       <h3><strong>You have no order history</strong></h3>
+                                       <h4>order something to make me happy :)</h4>
+                                       <a href="/" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                                       
+                                   
+                                   </div>
+                           </div>
+                   </div>
+                           
+                       
+                       </div>
+                    
+                    </div>
+                   
+                   </div>
+                <% } %>
+        
+
+
+                <%- include('../layouts/userFooter.ejs') %>

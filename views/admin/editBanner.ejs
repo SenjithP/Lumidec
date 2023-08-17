@@ -1,0 +1,143 @@
+<%- include('../layouts/adminHeader.ejs') %>
+        <section class="content-main">
+            <section class="content-main">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="content-header">
+                            <h2 class="content-title">Edit Products</h2>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row gx-5">
+                                    <div class="col-lg-12">
+                                        <section class="content-body p-xl-4">
+                                            <form method="post" action="updateBanner" enctype="multipart/form-data">
+                                                <div class="row mb-4">
+                                                    <label class="col-lg-12 col-form-label">Banner title*</label>
+                                                    <div class="col-lg-12">
+                                                        <input type="text" class="form-control" placeholder="Type here"
+                                                            name="bannerName"
+                                                            value="<%= bannerData[0].bannerName%>">
+                                                        <input type="hidden" class="form-control" name="id"
+                                                            value="<%= bannerData[0]._id %>">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <label class="col-lg-12 col-form-label">Description*</label>
+                                                    <div class="col-lg-12">
+                                                        <textarea class="form-control" placeholder="Type here" rows="4"
+                                                            name="description"><%= bannerData[0].description %></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <label class="col-lg-12 col-form-label">Status</label>
+                                                    <div class="col-lg-12">
+                                                        <select class="form-control" id="statusDropdown"
+                                                            onchange="changeStatus(this.value)" name="status">
+                                                            <% if (bannerData[0].is_listed) { %>
+                                                                <option value="listed">Listed</option>
+                                                                <option value="unlisted">Unlisted</option>
+                                                                <% } else { %>
+                                                                    <option value="unlisted">Unlisted</option>
+                                                                    <option value="listed">Listed</option>
+                                                                    <% } %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <hr class="mb-4 mt-0">
+                                                <div class="col-lg-12">
+                                                    <div class="card mb-4">
+                                                        <div class="card-header">
+                                                            <h4>Media</h4>
+                                                        </div>
+                                                        <div class="input-upload">
+                                                            <img src="../product-images/<%=bannerData[0].photo %>" alt="editing banner">
+                                                            <img src="/imgs/theme/upload.svg" id="imgView1" alt="">
+                                                            <input class="form-control" id="input1" name="photo"
+                                                                onchange="viewImage1(event),viewImage(event, 1)" type="file">
+                                                        </div>
+                                                        <div class="image-cropper" style="display:none;">
+                                                            <img src="" id="croppedImg1" alt="">
+                                                            <button type="button" id="saveButton1"
+                                                                class="btn-sm btn-primary">Save</button>
+                                                        </div>
+        
+                                                    </div> <!-- card end// -->
+                                                </div>
+                                                <br>
+                                                <button class="btn btn-primary" type="submit">Update</button>
+                                            </form>
+                                        </section> <!-- content-body .// -->
+                                    </div> <!-- col.// -->
+                                </div> <!-- row.// -->
+                            </div> <!-- card body end// -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section> <!-- content-main end// -->
+
+        <script>
+            function viewImage1(event) {
+                document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+            }
+    
+        </script>
+        <script>
+            function viewImage(event, index) {
+                let input = event.target;
+                let reader = new FileReader();
+    
+                reader.onload = function () {
+                    let dataURL = reader.result;
+                    let image = document.getElementById('imgView' + index);
+                    image.src = dataURL;
+    
+                    // Initialize Cropper.js on the image
+                    let cropper = new Cropper(image, {
+                        aspectRatio: 1920 / 600, // Set the aspect ratio to match the banner dimensions
+                        viewMode: 2, // Set the view mode to enable dragging the crop box for selecting the area
+                        guides: true, // Show the crop guides
+                        background: false, // Do not show the background behind the image
+                        autoCropArea: 1, // Set the initial crop area to cover the whole image
+                        zoomable: false // Disable zooming to keep the image size fixed for the banner
+                    });
+    
+    
+                    // Show the image cropper container
+                    let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+                    cropperContainer.style.display = 'block';
+    
+                    // Update the cropped image when the "Save" button is clicked
+                    let saveButton = document.querySelector('#saveButton' + index);
+                    saveButton.addEventListener('click', async function () {
+                        let croppedCanvas = cropper.getCroppedCanvas({
+                            width: 1920,
+                            height: 600
+                        });
+                        let croppedImage = document.getElementById("croppedImg" + index);
+                        croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+    
+                        // Generate a unique name for the cropped image file based on the current timestamp
+                        let timestamp = new Date().getTime();
+                        let fileName = `cropped-img-${timestamp}-${index}.png`;
+    
+                        await croppedCanvas.toBlob(blob => {
+                            let input = document.getElementById('input' + index)
+                            let imgFile = new File([blob], fileName, blob)
+                            const fileList = new DataTransfer();
+                            fileList.items.add(imgFile);
+                            input.files = fileList.files
+                        });
+                        // cropperContainer.style.display = 'none';
+                    });
+    
+                };
+    
+                reader.readAsDataURL(input.files[0]);
+            }
+        </script>
+        <%- include('../layouts/adminFooter.ejs') %>

@@ -1,0 +1,330 @@
+<style>
+    .tooltip-ellipsis {
+        max-width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        position: relative;
+        cursor: help;
+    }
+  
+    .tooltip-ellipsis::after {
+        content: attr(title);
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 4px 8px;
+        background-color: #000;
+        color: #fff;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s;
+    }
+  
+    .tooltip-ellipsis:hover::after {
+        opacity: 1;
+        visibility: visible;
+    }
+  
+  </style>
+  
+  
+
+  
+  <!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Lumidec Admin</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logocropped.png">
+    <!-- Template CSS -->
+    <link href="../assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-pzjw3lrFtIK2v99qfbMbk5E6PAA5H+1gi2mOy/2XQJyVkW5CjmJ2NoW7kN2ItEny" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-<insert-integrity-hash>" crossorigin="anonymous" />
+<link href="css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/images/logo.png" class="logo" alt="Lumidec Admin">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="page-products-list.html"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/productList">Product List</a>
+                        <a href="/admin/addProduct">Add product</a>
+                        <a href="/admin/loadCategory">Categories</a>
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/loadUserlist">Users List</a>
+                      
+                    </div>
+                </li>
+
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/order">Orders List</a>
+
+                    </div>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupons/Offers</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/addCoupon">Add & View Coupons</a>
+                        <a href="/admin/order">Add & View Offers</a>
+                    </div>
+                </li>
+
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#">  <i class="icon material-icons md-stars"></i>
+                        <span class="text">Banner</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/addBanner">Add Banner</a>
+                        <a href="/admin/listBanner">List Banner</a>
+
+                     
+                    </div>
+                </li>
+
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-store"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/salesreport">Sales Report</a>
+                    </div>
+                </li>
+                
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar">
+            <div class="col-search">
+        <h6 style="color: #003366;">"Merging Commerce and Community: Fueling Connections, Empowering Businesses."</h6>
+            </div>
+            <div style="margin-right: 15px;" class="col-nav">
+                
+                <ul class="nav">
+                   <li class="nav-item"><a class="dropdown-item text-danger" href="/admin/logout"><i
+                    class="material-icons md-exit_to_app"></i>Logout</a></li>
+                    <li class="nav-item">
+                        <a href="#" class="requestfullscreen nav-link btn-icon">
+                            <i class="material-icons md-cast"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                            <img class="img-xs rounded-circle" src="/images/logocropped.png" alt="Amin">
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+  
+  <section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Products List</h2>
+        </div>
+        <div>
+            <a href="/admin/addProduct" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+  
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row align-items-center"></div>
+        </header> <!-- card-header end// -->
+  
+        <div class="card-body">
+            <article class="itemlist">
+                <div class="row align-items-center">
+                    <div class="col-2 col-sm-1 col-md-1 col-lg-1 col-check flex-grow-0"></div>
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-name">
+                        <a class="itemside" href="#">
+                            <div class="left"></div>
+                            <div class="info">
+                                <h6 class="mb-0">General</h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-price flex-grow-1">
+                        <span>Price</span>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1">
+                        <span class="tooltip-ellipsis" title="Description">Description</span>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1">
+                        <span class="tooltip-ellipsis" title="Description">Quantity</span>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-price flex-grow-1">
+                        <span class="tooltip-ellipsis" title="Status">Status</span>
+                    </div>
+                    <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-action text-end">
+                        <a href="#">
+                            <i class="material-icons md-edit"></i> Action
+                        </a>
+                    </div>
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+        </div> <!-- card-body end// -->
+  
+        <div class="card-body">
+            <% product.forEach((item) => { %>
+            <article class="itemlist">
+                <div class="row align-items-center">
+                    <div class="col-2 col-sm-1 col-md-1 col-lg-1 col-check flex-grow-0"></div>
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-name">
+                        <a class="itemside" href="#">
+                            <div class="left">
+                                <img src="../product-images/<%= item.images[0] %>"
+                                    class="img-sm img-thumbnail" alt="Item"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#imageModal<%= item._id %>">
+                            </div>
+                            <div class="info">
+                                <h6 class="mb-0"><%= item.name %></h6>
+                            </div>
+                        </a>
+                    </div>
+  
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-price flex-grow-1">
+                        <span><%= item.price %></span>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1 tooltip-ellipsis">
+                        <span class="tooltip-ellipsis" title="<%= item.description %>"><%= item.description %></span>
+                    </div>
+                    <%if(item.quantity<25){%>
+                        <div style="margin-left: 30px;" class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1 tooltip-ellipsis">
+                            <span class="tooltip-ellipsis" title="<%= item.quantity %>"><%= item.quantity %>  <i class="fa-solid fa-triangle-exclamation fa-beat-fade" style="color: #f90b0b;"></i></span>
+                        </div>
+                    <%}else{%>
+                        <div style="margin-left: 30px;"  class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1 tooltip-ellipsis">
+                            <span class="tooltip-ellipsis" title="<%= item.quantity %>"><%= item.quantity %></span>
+                        </div>
+                    <%}%>
+                    
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-price flex-grow-1">
+                        <span class="tooltip-ellipsis" title="<%= item.is_listed?'Listed':'Unlisted' %>"><%= item.is_listed?"Listed":"Unlisted"%></span>
+                    </div>
+                    <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-action text-end">
+                        <a href="/admin/editProductList?id=<%=item._id%>"
+                            class="btn btn-sm font-sm rounded btn-brand">
+                            <i class="material-icons md-edit"></i> Edit
+                        </a>
+                    </div>
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+            <% }); %>
+        </div> <!-- card-body end// -->
+  
+  
+    </div> <!-- card end// -->
+  </section> <!-- content-main end// -->
+  
+  <% product.forEach((item) => { %>
+  <!-- Modal -->
+  <div class="modal fade" id="imageModal<%= item._id %>" tabindex="-1" aria-labelledby="imageModalLabel<%= item._id %>"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel<%= item._id %>">Product Images - <%= item.name %></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="carousel<%= item._id %>" class="carousel slide" data-bs-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <% item.images.forEach((image, index) => { %>
+                        <li data-bs-target="#carousel<%= item._id %>" data-bs-slide-to="<%= index %>"
+                            <% if (index === 0) { %> class="active" <% } %>></li>
+                        <% }); %>
+                    </ol>
+                    <!-- Slides -->
+                    <div class="carousel-inner">
+                        <% item.images.forEach((image, index) => { %>
+                        <div class="carousel-item <% if (index === 0) { %> active <% } %>">
+                            <img src="../product-images/<%= image %>" class="d-block w-100" alt="Item">
+                        </div>
+                        <% }); %>
+                    </div>
+                    <!-- Controls -->
+                    <a class="carousel-control-prev" href="#carousel<%= item._id %>" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel<%= item._id %>" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <% }); %>
+  
+</section> <!-- content-main end// -->
+<footer class="main-footer font-xs">
+    
+</footer>
+</main>
+<script src="../assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="../assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/vendors/select2.min.js"></script>
+<script src="../assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="../assets/js/vendors/jquery.fullscreen.min.js"></script>
+<!-- Main Script -->
+<script src="../assets/js/main.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+</html>
+  

@@ -1,0 +1,94 @@
+<%- include('../layouts/userHeader.ejs') %>
+    <div class="container orderdetaibg pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-md-8 col-xl-8">
+                <div class="h-100 bg-secondary rounded p-4">
+                    <div style="margin-top: 30px;" class="align-items-center justify-content-between mb-2">
+                        <h3 class="mb-0 ">Products Details</h3>
+                    </div>
+                    <div class="card-container">
+                        <% order_data.items.forEach(function(items, index) { %>
+                        <div class="card">
+                            <div class="card-header">
+                                <%= index + 1 %>
+                            </div>
+                            <div class="card-body">
+                                <div class="product-name">
+                                    <%= items.product.name %>
+                                </div>
+                                <div class="quantity">
+                                    Quantity: <%= items.quantity %>
+                                </div>
+                                <div class="price">
+                                    Price: ₹<%= items.price %>
+                                </div>
+                                <div class="product-image">
+                                    <img src="../product-images/<%= items.product.images[0] %>" class="img-thumbnail" width="60px" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-xl-4">
+                <div class="custom-card-container">
+                    <!-- Order Details Card -->
+                    <div class="custom-card">
+                        <div class="custom-card-header">
+                            <h3 class="mb-0 ">Order Details</h3>
+                        </div>
+                        <div class="custom-card-body">
+                            <ul class="addreul">
+                                <li>
+                                    <h4>Customer Name: <span><%= order_data.user.name %></span></h4>
+                                </li>
+                                <li>
+                                    <h4>Ordered Date: <span><%= order_data.createdAt.toLocaleDateString() %></span></h4>
+                                </li>
+                                <li>
+                                    <h4>Ordered Status: <span><%= order_data.status %></span></h4>
+                                </li>
+                                <% if (locals.order_data.reason) { %>
+                                    <li>
+                                        <h4>Reason: <span><%= order_data.reason %></span></h4>
+                                    </li>
+                                <% } %>
+                                <li>
+                                    <h4>Discount: <span>₹<%= order_data.discount %></span></h4>
+                                </li>
+                                <li>
+                                    <h4>Total Price: <span>₹<%= order_data.total - order_data.discount + order_data.shipping_charge %></span></h4>
+                                </li>
+                                <li>
+                                    <h4>Payment Method: <span><%= order_data.payment_method %></span></h4>
+                                </li>
+                            </ul>
+                            <a href="/invoice/<%= order_data._id %>" class="btn btn-danger">Download Invoice</a>
+                        </div>
+                    </div>
+                
+                    <!-- Billing Address Card -->
+                    <div class="custom-card">
+                        <div class="custom-card-header">
+                            <h3 class="mb-0 ">Billing Address</h3>
+                        </div>
+                        <div class="custom-card-body">
+                            <ul class="payment_address">
+                                <li>Fullname: <span><%= order_data.address.name %></span></li>
+                                <li>Address: <span><%= order_data.address.address %></span></li>
+                                <li>Phone No: <span><%= order_data.address.mobile %></span></li>
+                                <li>Pincode: <span><%= order_data.address.pincode %></span></li>
+                                <li>City/Town: <span><%= order_data.address.city %></span></li>
+                                <li>State: <span><%= order_data.address.state %></span></li>
+                                <li>Address Type: <span><%= order_data.address.addressType %></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <%- include('../layouts/userFooter.ejs') %>

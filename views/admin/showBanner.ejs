@@ -1,0 +1,69 @@
+<%- include('../layouts/adminHeader.ejs') %>
+        <section class="content-main">
+  
+  <section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Banner List</h2>
+        </div>
+        <div>
+            <a href="/admin/addBanner" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+  
+    <table id="thisTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Heading</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% banner.forEach((item) => { %>
+            <tr>
+                <td>
+                    <a href="#">
+                        <div class="left">
+                            <img src="../product-images/<%= item.photo %>" class="img-sm img-thumbnail" alt="Item"
+                                data-bs-toggle="modal" data-bs-target="#imageModal<%= item._id %>">
+                        </div>
+                        <div class="info">
+                            <h6 class="mb-0"><%= item.name %></h6>
+                        </div>
+                    </a>
+                </td>
+                <td><span class="tooltip-ellipsis" title="<%= item.bannerName %>"><%= item.bannerName %></span></td>
+                <td><span class="tooltip-ellipsis" title="<%= item.description %>"><%= item.description %></span></td>
+                <td><span class="tooltip-ellipsis" title="<%= item.is_listed?'Listed':'Unlisted' %>"><%= item.is_listed?"Listed":"Unlisted"%></span></td>
+                <td>
+                    <a href="/admin/editBanner?id=<%=item._id%>" class="btn btn-sm font-sm rounded btn-brand">
+                        <i class="material-icons md-edit"></i> Edit
+                    </a>
+                    <a href="/admin/deleteBanner?id=<%=item.id%>" class="btn btn-sm font-sm btn-light rounded">
+                        <i class="material-icons md-delete_forever"></i> Delete
+                    </a>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+  </section> <!-- content-main end// -->
+
+</section> <!-- content-main end// -->
+
+<script>
+    $(document).ready(function () {
+        $.noConflict();
+        $('#thisTable').DataTable({
+            "paging": true,          // Enable pagination
+            "pageLength": 10,        // Number of rows per page
+            "lengthMenu": [5,10, 25, 50, 75, 100],  // Dropdown options for rows per page
+
+        });
+    });
+</script>
+<%- include('../layouts/adminFooter.ejs') %>

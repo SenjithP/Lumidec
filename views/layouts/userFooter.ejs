@@ -1,0 +1,184 @@
+<!-- //footer -->
+<div class="footer">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between;align-items: center; " class="w3_footer_grids">
+            <div class="col-md-2 w3_footer_grid">
+                <h3>Contact</h3>
+
+                <ul class="address">
+                    <li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Thrissur,Kerala
+                        <span>India.</span>
+                    </li>
+                    <li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a
+                            href="mailto:info@example.com">lumidec.ac@gmail.com</a></li>
+                    <li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+91-9854717456</li>
+                </ul>
+            </div>
+
+            <div class="col-md-8 w3_footer_grid">
+                <h3 style="text-align: center;">Tips</h3>
+           <h5 style="color: white;font-weight: 600; line-height: 1.5;letter-spacing: 1.5; text-align: justify;"> Elevate your living spaces with a touch of enchantment from Lumidec's curated collection of fancy and
+            decorative lights, now available in your shopping cart. Unleash the power of illumination as you explore a
+            mesmerizing array of designs that transcend the ordinary. Whether it's transforming your cozy nook into a
+            captivating haven or adding a dash of brilliance to your gatherings, Lumidec's lights redefine ambiance.
+            Illuminate your world with a symphony of elegance and style, turning everyday moments into magical memories.
+            Discover the artistry of light in every corner, as Lumidec's lights not only brighten spaces but also evoke
+            emotions. With our carefully selected range, your Lumidec shopping cart becomes a gateway to a realm where
+            radiance meets refinement – where the ordinary fades, and the extraordinary shines.</h5>
+
+        </div>
+            <div class="col-md-2 w3_footer_grid">
+                <h3>Profile</h3>
+                <ul class="info">
+                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="/shop">Store</a></li>
+                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="/cart">My Cart</a></li>
+                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="/login">Login</a></li>
+                    <li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="/register">Create Account</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+
+    <div class="footer-copy">
+
+        <div class="container">
+            <p>© 2023 Lumidec. All rights reserved
+        </div>
+    </div>
+
+</div>
+<div class="footer-botm">
+    <div class="container">
+        <div class="w3layouts-foot">
+            <ul>
+                <li><a href="#" class="w3_agile_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                <li><a href="#" class="agile_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                <li><a href="#" class="w3_agile_dribble"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+                <li><a href="#" class="w3_agile_vimeo"><i class="fa fa-vimeo" aria-hidden="true"></i></a></li>
+            </ul>
+        </div>
+        <div class="payment-w3ls">
+            <img src="images/card.png" alt=" " class="img-responsive">
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+</div>
+<!-- //footer -->
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+<!-- top-header and slider -->
+<!-- here stars scrolling icon -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        /*
+            var defaults = {
+            containerID: 'toTop', // fading element id
+            containerHoverID: 'toTopHover', // fading element hover id
+            scrollSpeed: 1200,
+            easingType: 'linear' 
+            };
+        */
+
+        $().UItoTop({ easingType: 'easeOutQuart' });
+
+    });
+</script>
+<!-- //here ends scrolling icon -->
+<script src="js/minicart.min.js"></script>
+<script>
+    // Mini Cart
+    paypal.minicart.render({
+        action: '#'
+    });
+
+    if (~window.location.search.indexOf('reset=true')) {
+        paypal.minicart.reset();
+    }
+</script>
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="/js/imagezoom.js"></script>
+<!-- main slider-banner -->
+<script src="js/skdslider.min.js"></script>
+<link href="css/skdslider.css" rel="stylesheet">
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('#demo1').skdslider({ 'delay': 4000, 'animationSpeed': 2000, 'showNextPrev': true, 'showPlayButton': true, 'autoSlide': true, 'animationType': 'fading' });
+
+        jQuery('#responsive').change(function () {
+            $('#responsive_wrapper').width(jQuery(this).val());
+        });
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Function to switch the big image source when a small image is clicked or touched
+        $(".smallImage").on("click touchstart", function () {
+            var newImageSrc = $(this).attr("src");
+            $("#bigImage").attr("src", newImageSrc);
+        });
+    });
+</script>
+
+<script>
+    // Initialize the ImageZoom plugin after the document is ready
+    $(document).ready(function () {
+        $('[data-imagezoom]').imageZoom();
+    });
+</script>
+
+<script>
+    function change_country(selectedValue) {
+        if (selectedValue !== "null") {
+            const selectElement = document.getElementById("country");
+            const selectedOption = selectElement.querySelector(`option[value="${selectedValue}"]`);
+            const categoryUrl = selectedOption.getAttribute("data-url");
+            window.location.href = categoryUrl;
+        }
+    }
+</script>
+
+<!-- Include Handsontable CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.min.css">
+
+<!-- Include Handsontable JS -->
+<script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.min.js"></script>
+
+
+<script>
+    const startButton = document.getElementById('startButton');
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            searchInput.value = transcript;
+            searchForm.submit();
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Voice recognition error:', event.error);
+        };
+
+        startButton.addEventListener('click', () => {
+            recognition.start();
+        });
+    } else {
+        console.warn('Web Speech API not supported in this browser.');
+    }
+</script>
+
+<!-- //main slider-banner -->
+</body>
+
+</html>
