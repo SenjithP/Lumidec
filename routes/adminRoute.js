@@ -37,7 +37,7 @@ adminRoute.get('*',validate.checkUser)
 //-----------------------------GET METHODS---------------------------------//
 
 //DASHBOARD
-adminRoute.get("/dashBoard",validate.requireAuth,adminController.admin);
+adminRoute.get("/dashBoard",adminController.admin);
 
 // LOGIN
 adminRoute.get("/adminlogin", adminController.loadAdminLogin);
@@ -91,7 +91,7 @@ adminRoute.put("/editCategory/:id",validate.requireAuth, categoryController.upda
 //-----------------------------POST METHODS---------------------------------//
 
 //LOGIN
-adminRoute.post("/adminlogin",validate.requireAuth, adminController.adminLogin);
+adminRoute.post("/adminlogin", adminController.adminLogin);
 
 //CATEGORY
 adminRoute.post("/addCategory",validate.requireAuth, categoryController.createCategory);

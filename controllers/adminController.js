@@ -26,7 +26,7 @@ const adminLogin = async (req, res) => {
     if (adminData) {
       if (password === adminData.password) {
         req.session.admin = adminData._id;
-        res.redirect("/admin/loadUserlist");
+        res.redirect("/admin/dashboard");
       } else {
         res.render("adminLogin", {
           message: "Email and Password are Incorrect",
@@ -104,7 +104,7 @@ const unBlockUser = async (req, res) => {
 const logout = async (req, res) => {
   try {
     req.session.destroy();
-    res.redirect("/admin/adminlogin");
+    res.redirect("/admin/adminLogin");
   } catch (error) {
     console.log(error.message);
   }
