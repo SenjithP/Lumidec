@@ -77,7 +77,7 @@ const updateCategory = async (req, res) => {
 };
 
 
-const deleteCategory = async (req, res) => {
+const deleteCategory = async (req, res) => {        
   try {
     const categoryId = req.query.id;
     await Category.findByIdAndDelete(categoryId);

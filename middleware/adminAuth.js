@@ -1,5 +1,6 @@
 const Admin = require('../models/adminModel');
 
+
 const requireAuth = (req, res, next) => {
   if (req.session.admin) {
     // User is authenticated, continue to the next middleware

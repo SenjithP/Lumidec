@@ -213,38 +213,39 @@ const reportReview = async (req, res) => {
 
 const loadShopPage = async (req, res) => {
   try {
-    const user = req.session.user; // Check if user session exists
+    const user = req.session.user;
 
     const category = await Category.find({});
     const coupon = await Coupon.find({});
-    // const page = parseInt(req.query.page) || 1;
-    // const limit = 6;
-    // const skip = (page - 1) * limit; // Calculate the number of products to skip
+    
+    const page = parseInt(req.query.page) || 1;
+    const ITEMS_PER_PAGE = 12; // Define the number of items per page
+    const skip = (page - 1) * ITEMS_PER_PAGE;
 
     // Fetch products with pagination
-    // const totalProducts = await Product.countDocuments({ isListed: true }); // Get the total number of products (without the isProductListed condition)
-    // const totalPages = Math.ceil(totalProducts / limit); // Calculate the total number of pages
+    const totalProducts = await Product.countDocuments({ is_listed: true });
+    const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
 
-    const products = await Product.find({ is_listed: true }) // Fetch products without the isProductListed condition
-      // .skip(skip)
-      // .limit(limit)
+    const products = await Product.find({ is_listed: true })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE)
       .populate("category");
-
-    // console.log(products);
+    
 
     res.render("shop", {
       user,
-      product: products,
+      product: products, // Corrected variable name
       category,
-      coupon: coupon,
-
-      // currentPage: page,
-      // totalPages,
+      coupon,
+      currentPage: page,
+      totalPages,
     });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Internal Server Error"); // Sending an error response to the client
   }
 };
+
 
 const addToCart = async (req, res) => {
   try {

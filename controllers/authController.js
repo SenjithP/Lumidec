@@ -202,7 +202,11 @@ const insertUser = async (req, res) => {
 //LOAD LOGIN PAGE
 const loginLoad = async (req, res) => {
   try {
+    if(req.session.user){
+      res.redirect('/home')
+    }else{
     res.render("login");
+    }
   } catch (error) {
     console.log(error.message);
   }
