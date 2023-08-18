@@ -6,7 +6,7 @@ const requireAuth = (req, res, next) => {
     // User is authenticated, continue to the next middleware
     next();
   } else {
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
   }
 };
 
