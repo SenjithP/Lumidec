@@ -1,7 +1,9 @@
 <%- include('../layouts/adminHeader.ejs') %>
 
 <section class="content-main">
-
+<% if(!order_data) {%>
+    <h1>No Orders Yet!</h1>
+    <%}else{%>
     <div class="table-responsive">
         <h3>Orders List</h3>
         <br>
@@ -50,7 +52,8 @@
                         </td>
                         <td><%= orders.status %>
                             <div>
-                                <a type="submit" href="/orderdetail/<%= orders._id %>"
+
+                                <a type="submit" href="/admin/orderDetails/<%= orders._id %>"
                                     class="btn btn-light">Details</a>
                             </div>
                         </td>
@@ -101,7 +104,7 @@
             </tbody>
         </table>
     </div>
-
+<% } %>
 </section>
 
 <script>

@@ -82,6 +82,9 @@ adminRoute.get("/deleteBanner",validate.requireAuth, bannerController.deleteBann
 //SALESREPORT
 adminRoute.get("/salesreport",validate.requireAuth,adminController.salesreport)
 
+//ORDERS
+adminRoute.get('/orderDetails/:id',adminController.orderDetails)
+
 
 //-----------------------------PUT METHODS---------------------------------//
 // CATEGORY
@@ -96,7 +99,7 @@ adminRoute.post("/adminlogin", adminController.adminLogin);
 //CATEGORY
 adminRoute.post("/addCategory",validate.requireAuth, categoryController.createCategory);
 
-//PRODUCT
+//PRODUCT 
 adminRoute.post("/addProduct",validate.requireAuth, multer.upload, productController.createProduct);
 adminRoute.post(
   "/updateProductList",

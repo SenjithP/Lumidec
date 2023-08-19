@@ -94,7 +94,9 @@
                         <h2>
                             <%= categoryName %>
                         </h2>
-
+                        <br>
+<p><%= categoryDescription %></p>
+<br>
                         <% for (let i=0; i < product.length; i +=6) { %>
                             <div class="agile_top_brands_grids">
                                 <% for (let j=i; j < i + 6&& j < product.length; j++) { %>
@@ -139,7 +141,7 @@
                                                                     </p>
                                                                     <h4>
                                                                         <%= `₹${product[j].price}` %>
-                                                                            <span>₹10000</span>
+                                                                            <!-- <span>₹100000</span> -->
                                                                     </h4>
                                                                 </div>
                                                                 <div class="snipcart-details top_brand_home_details">

@@ -1,15 +1,15 @@
 <%- include('../layouts/userHeader.ejs') %>
 
-<!-- breadcrumbs -->
-<div class="breadcrumbs">
-    <div class="container">
-        <ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
-            <li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
-            <li class="active">Profile Page</li>
-        </ol>
+    <!-- breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+                <li><a href="/home"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+                <li class="active">Profile Page</li>
+            </ol>
+        </div>
     </div>
-</div>
-<!-- //breadcrumbs -->
+    <!-- //breadcrumbs -->
 
 
     <div class="top-brands">
@@ -46,9 +46,11 @@
                                         </li>
                                         <li><a class="myord" href="/orders?id=<%= locals.user.id %>">MY ORDERS</a></li>
                                         <li>
-                                            <p class="user-wallet">Referal Id<%= locals.user.referalId %>
-                                            </p>
+                                            <h6>
+                                              My Referal Id :  <%= locals.user.referalId %>
+                                            </h6>
                                         </li>
+
                                     </ul>
                                 </div>
                             </div>

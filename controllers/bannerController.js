@@ -47,7 +47,6 @@ const editBanner = async (req, res) => {
   try {
     const id = req.query.id;
     const bannerData = await Banner.find({ _id: id });
-    console.log(bannerData);
     res.render("editBanner", {
       bannerData,
     });
@@ -59,7 +58,6 @@ const editBanner = async (req, res) => {
 const updateBanner = async (req, res) => {
   try {
     const id = req.body.id;
-    console.log(id);
     const bannerName = req.body.bannerName;
     const description = req.body.description;
     const status = req.body.status === "listed";
@@ -67,7 +65,6 @@ const updateBanner = async (req, res) => {
 
     // Find the existing product data
     const bannerData = await Banner.findById(id);
-    console.log(bannerData);
 
     // Check if a new image is provided
     const updatedImage = image ? image : bannerData.photo; // Use the existing image if no new image is provided

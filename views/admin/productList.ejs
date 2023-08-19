@@ -197,10 +197,13 @@
                         <span>Price</span>
                     </div>
                     <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1">
-                        <span class="tooltip-ellipsis" title="Description">Description</span>
+                        <span class="tooltip-ellipsis" title="aboutProduct">About Product</span>
                     </div>
                     <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1">
-                        <span class="tooltip-ellipsis" title="Description">Quantity</span>
+                        <span class="tooltip-ellipsis" title="helpfulDetails">Helpful Details</span>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1">
+                        <span class="tooltip-ellipsis" title="quantity">Quantity</span>
                     </div>
                     <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-price flex-grow-1">
                         <span class="tooltip-ellipsis" title="Status">Status</span>
@@ -222,7 +225,7 @@
                     <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-name">
                         <a class="itemside" href="#">
                             <div class="left">
-                                <img src="../product-images/<%= item.images[0] %>"
+                                <img src="../admin/product-images/<%= item.images[0] %>"
                                     class="img-sm img-thumbnail" alt="Item"
                                     data-bs-toggle="modal"
                                     data-bs-target="#imageModal<%= item._id %>">
@@ -237,7 +240,10 @@
                         <span><%= item.price %></span>
                     </div>
                     <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1 tooltip-ellipsis">
-                        <span class="tooltip-ellipsis" title="<%= item.description %>"><%= item.description %></span>
+                        <span class="tooltip-ellipsis" title="<%= item.aboutProduct %>"><%= item.aboutProduct %></span>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1 tooltip-ellipsis">
+                        <span class="tooltip-ellipsis" title="<%= item.helpfulDetails %>"><%= item.helpfulDetails %></span>
                     </div>
                     <%if(item.quantity<25){%>
                         <div style="margin-left: 30px;" class="col-2 col-sm-2 col-md-3 col-lg-1 col-price flex-grow-1 tooltip-ellipsis">

@@ -10,6 +10,7 @@ const { MessageContent } = require("../helpers/sendEmail");
 const { OrderIdGenHelper } = require("../helpers/orderIdGenerator");
 const Review = require("../models/reviewAndRating");
 const Wishlist = require("../models/wishListModel");
+const ITEMS_PER_PAGE = 12;
 
 //GET HOME PAGE
 const loadHome = async (req, res) => {
@@ -217,7 +218,7 @@ const loadShopPage = async (req, res) => {
 
     const category = await Category.find({});
     const coupon = await Coupon.find({});
-    
+
     const page = parseInt(req.query.page) || 1;
     const ITEMS_PER_PAGE = 12; // Define the number of items per page
     const skip = (page - 1) * ITEMS_PER_PAGE;
@@ -230,7 +231,6 @@ const loadShopPage = async (req, res) => {
       .skip(skip)
       .limit(ITEMS_PER_PAGE)
       .populate("category");
-    
 
     res.render("shop", {
       user,
@@ -245,7 +245,6 @@ const loadShopPage = async (req, res) => {
     res.status(500).send("Internal Server Error"); // Sending an error response to the client
   }
 };
-
 
 const addToCart = async (req, res) => {
   try {
@@ -315,6 +314,7 @@ const categoryPage = async (req, res) => {
       category,
       totalProducts,
       categoryName: selectedCategory ? selectedCategory.name : "All",
+      categoryDescription: selectedCategory.description
     });
   } catch (err) {
     console.log("category page error", err);
@@ -360,7 +360,6 @@ const addToWishlist = async (req, res) => {
   try {
     const userId = req.session.userData?._id;
     const productId = req.params.id;
-    console.log("ggtytrr");
     let userWishlist = await Wishlist.findOne({ userId: userId });
     if (!userWishlist) {
       const newWishlist = new Wishlist({ userId: userId, products: [] });
@@ -384,8 +383,6 @@ const addToWishlist = async (req, res) => {
 };
 
 const deleteWishlist = async (req, res) => {
-  console.log("testing");
-
   try {
     const productId = req.params.id;
     const userId = req.session.userData?._id;
@@ -394,7 +391,6 @@ const deleteWishlist = async (req, res) => {
       { $pull: { products: { productId: productId } } },
       { new: true }
     );
-    console.log(productDeleted);
     if (productDeleted) {
       res.status(200).json({
         success: true,
@@ -739,7 +735,6 @@ const payment = async (req, res) => {
 const editaddress = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const userId = req.session.userData?._id;
     const user = await User.findById(userId);
 
@@ -839,7 +834,6 @@ const placeOrder = async (req, res) => {
     const user = req.session.user; // Check if user session exists
     const UserDetails = req.session.user;
     const user_id = req.session.userData?._id;
-    console.log(user_id);
     const payment_method = req.body.payment_method;
     const userSchema = await User.findById(user_id);
     const addressIndex = userSchema.address.findIndex((item) =>
@@ -898,7 +892,7 @@ const placeOrder = async (req, res) => {
       });
 
       await order.save();
-      await Cart.deleteOne({ userId: user_id });
+      // await Cart.deleteOne({ userId: user_id });
       if (payment_method === "WALLET") {
         const Twallet = userSchema.totalWallet - totalPrice;
         await User.findByIdAndUpdate(user_id, { totalWallet: Twallet });
@@ -932,12 +926,11 @@ const placeOrder = async (req, res) => {
       });
 
       await order.save();
-      console.log("testing");
       if (payment_method === "Paypal") {
         MessageContent(req, res);
       }
 
-      await Cart.deleteOne({ userId: user_id });
+      // await Cart.deleteOne({ userId: user_id });
 
       cart.products.forEach((element) => {
         paypalTotal += totalPrice + shipping_charge;
@@ -1041,7 +1034,6 @@ const loadConfirm = async (req, res) => {
 const orderDetails = async (req, res) => {
   try {
     const userId = req.session.user.id; // Assuming user ID is available in the session
-
     if (!userId) {
       // Handle the case when user ID is not available in the session
       return res.send({ message: "User ID not found in session" });
@@ -1087,14 +1079,13 @@ const ordercancel = async (req, res) => {
 const orderdetailspage = async (req, res) => {
   try {
     const id = req.query.id;
-    const use = req.session.user;
-    const user = await User.findById(use._id);
+    const user = req.session.user;
+    const users = await User.findById(user._id);
     const order_data = await Order.findOne({ _id: id })
       .populate("user")
       .populate("items.product")
       .populate("items.quantity");
-    console.log(JSON.stringify(order_data, null, 2));
-    res.render("orderdetail", { order_data, user });
+    res.render("orderdetail", { order_data, users,user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -1136,7 +1127,6 @@ const wallet = async (req, res) => {
     const user_id = req.query.id;
     const user = await User.findById(user_id);
     const referalWallet = user.walletAdded;
-    console.log(referalWallet);
     const orderrefund = await Order.find({
       user: user_id,
       status: "Refunded",
@@ -1163,10 +1153,16 @@ const wallet = async (req, res) => {
 
 const searchProduct = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
     const pro = req.query.product;
     const productResults = await Product.find({
       name: { $regex: new RegExp(`^${pro}`, "i") },
-    });
+    })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
 
     const category = await Category.find();
     const coupon = await Coupon.find({});
@@ -1179,6 +1175,8 @@ const searchProduct = async (req, res) => {
         category,
         product: productResults,
         coupon: coupon,
+        currentPage: page,
+        totalPages,
       });
     } else {
       res.render("shop", {
@@ -1197,6 +1195,10 @@ const searchProduct = async (req, res) => {
 
 const pricerange = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
     const category = await Category.find();
     const user = req.session.user;
     const min_price = req.query.min_price;
@@ -1212,11 +1214,13 @@ const pricerange = async (req, res) => {
     }).countDocuments();
 
     if (!procount) {
-      const product2 = await Product.find().limit(4);
+      const product2 = await Product.find().skip(skip).limit(ITEMS_PER_PAGE);
       res.render("shop", {
         user,
         category,
         product2,
+        currentPage: page,
+        totalPages,
         product,
         msg: "there is no products in this price range",
         coupon: coupon,
@@ -1229,6 +1233,8 @@ const pricerange = async (req, res) => {
         product,
         product1: productss,
         coupon: coupon,
+        currentPage: page,
+        totalPages,
       });
     }
   } catch (error) {
@@ -1239,15 +1245,24 @@ const pricerange = async (req, res) => {
 
 const sortProductsLowToHigh = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
     const category = await Category.find();
     const user = req.session.user;
-    const sortedProducts = await Product.find({}).sort({ price: 1 });
+    const sortedProducts = await Product.find({})
+      .sort({ price: 1 })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
     const coupon = await Coupon.find({});
     res.render("shop", {
       user,
       category,
       product: sortedProducts,
       coupon: coupon,
+      currentPage: page,
+      totalPages,
     });
   } catch (error) {
     console.error(error);
@@ -1257,15 +1272,21 @@ const sortProductsLowToHigh = async (req, res) => {
 
 const sortProductsHighToLow = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
     const category = await Category.find();
     const user = req.session.user;
     const sortedProducts = await Product.find({}).sort({ price: -1 });
-    const coupon = await Coupon.find({});
+    const coupon = await Coupon.find({}).skip(skip).limit(ITEMS_PER_PAGE);
     res.render("shop", {
       user,
       category,
       product: sortedProducts,
       coupon: coupon,
+      currentPage: page,
+      totalPages,
     });
   } catch (error) {
     console.error(error);

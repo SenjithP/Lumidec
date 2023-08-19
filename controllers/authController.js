@@ -231,7 +231,6 @@ const verifyLogin = async (req, res) => {
           name: userData.name,
         }; // Store user's name & id in session
 
-        console.log(req.session.user);
         res.status(200).json({ message: "Login successfull" }); // Return success status
       } else {
         res.status(401).json({ message: "Email or Password are Incorrect" }); // Return error status

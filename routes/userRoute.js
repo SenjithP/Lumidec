@@ -5,7 +5,6 @@ const authController = require("../controllers/authController");
 const userController = require("../controllers/userController")
 const couponController = require("../controllers/couponController");
 const validate = require('../middleware/authMiddleware');
-const block = require('../middleware/blockMiddleware');
 
 
 
@@ -53,34 +52,34 @@ userRoute.get("/shop", userController.loadShopPage);
 userRoute.get('/categoryShop',userController.categoryPage)
 
 //WISHLIST
-userRoute.get("/wishlist",block.checkBlocked,validate.requireAuth,userController.loadWishlist)
-userRoute.get('/addToWishlist/:id',block.checkBlocked,validate.requireAuth,userController.addToWishlist)
+userRoute.get("/wishlist",validate.requireAuth,userController.loadWishlist)
+userRoute.get('/addToWishlist/:id',validate.requireAuth,userController.addToWishlist)
 
 //CART
-userRoute.get("/cart",block.checkBlocked,validate.requireAuth,userController.loadCart)
-userRoute.get('/addToCart/:id',block.checkBlocked,validate.requireAuth,userController.addToCart)
-userRoute.get('/checkout',block.checkBlocked,validate.requireAuth,userController.checkout)
-userRoute.get('/checkout/:id',block.checkBlocked,validate.requireAuth,userController.payment);
+userRoute.get("/cart",validate.requireAuth,userController.loadCart)
+userRoute.get('/addToCart/:id',validate.requireAuth,userController.addToCart)
+userRoute.get('/checkout',validate.requireAuth,userController.checkout)
+userRoute.get('/checkout/:id',validate.requireAuth,userController.payment);
 
 //order
-userRoute.get('/confirm',block.checkBlocked,validate.requireAuth,userController.loadConfirm);
-userRoute.get("/orders",block.checkBlocked,validate.requireAuth,userController.orderDetails)
-userRoute.get("/orderDetailsPage",block.checkBlocked,validate.requireAuth,userController.orderdetailspage)
-userRoute.get('/payment',block.checkBlocked,validate.requireAuth,userController.payment);
-userRoute.get('/paypal-success',block.checkBlocked,validate.requireAuth,userController.paypal_success)
-userRoute.get('/paypal-err',block.checkBlocked,validate.requireAuth,userController.paypal_err)
+userRoute.get('/confirm',validate.requireAuth,userController.loadConfirm);
+userRoute.get("/orders",validate.requireAuth,userController.orderDetails)
+userRoute.get("/orderDetailsPage",validate.requireAuth,userController.orderdetailspage)
+userRoute.get('/payment',validate.requireAuth,userController.payment);
+userRoute.get('/paypal-success',validate.requireAuth,userController.paypal_success)
+userRoute.get('/paypal-err',validate.requireAuth,userController.paypal_err)
 
 //SINGLE
 userRoute.get('/single',userController.loadSingle)
 
 //WALLET
-userRoute.get('/wallet',block.checkBlocked,validate.requireAuth,userController.wallet)
+userRoute.get('/wallet',validate.requireAuth,userController.wallet)
 
 //PROFILE
-userRoute.get('/Profile',block.checkBlocked,validate.requireAuth,userController.profile)
+userRoute.get('/Profile',validate.requireAuth,userController.profile)
 
 //Invoice
-userRoute.get('/invoice/:id',block.checkBlocked,validate.requireAuth,userController.invoice)
+userRoute.get('/invoice/:id',validate.requireAuth,userController.invoice)
 
 //SEARCH
 userRoute.get('/searchProduct',userController.searchProduct);
@@ -140,24 +139,24 @@ userRoute.post("/login", authController.verifyLogin);
 userRoute.post("/forgot-password", authController.forgotPassword);
 
 //PROFILE
-userRoute.post("/profilePassword",block.checkBlocked,validate.requireAuth, authController.profilePassword);
+userRoute.post("/profilePassword",validate.requireAuth, authController.profilePassword);
 
 //CHECKOUT
-userRoute.post('/addAddress',block.checkBlocked,validate.requireAuth,userController.addaddress)
-userRoute.post('/edit_address/:id',block.checkBlocked,validate.requireAuth, userController.editaddress);         
+userRoute.post('/addAddress',validate.requireAuth,userController.addaddress)
+userRoute.post('/edit_address/:id',validate.requireAuth, userController.editaddress);         
 
 //ORDER
-userRoute.post('/placeOrder',block.checkBlocked,validate.requireAuth,userController.placeOrder);
-userRoute.post("/order_cancel",block.checkBlocked,validate.requireAuth, userController.ordercancel);
-userRoute.post('/ordereReturn',block.checkBlocked,validate.requireAuth,userController.returns);
+userRoute.post('/placeOrder',validate.requireAuth,userController.placeOrder);
+userRoute.post("/order_cancel",validate.requireAuth, userController.ordercancel);
+userRoute.post('/ordereReturn',validate.requireAuth,userController.returns);
 
 //COUPON
-userRoute.post("/applyCoupon",block.checkBlocked,validate.requireAuth, couponController.applycoupon);                
-userRoute.post("/cancelCoupon",block.checkBlocked,validate.requireAuth, couponController.cancelcoupon);
+userRoute.post("/applyCoupon",validate.requireAuth, couponController.applycoupon);                
+userRoute.post("/cancelCoupon",validate.requireAuth, couponController.cancelcoupon);
 
 
 //REVIEW
-userRoute.post('/addReviews',block.checkBlocked,validate.requireAuth,userController.ratingAndReview)
+userRoute.post('/addReviews',validate.requireAuth,userController.ratingAndReview)
 
 
 

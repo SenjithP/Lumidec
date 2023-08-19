@@ -51,7 +51,9 @@
                                 <% } else { %>
                                     <h5 style="margin-bottom: 10px;"> No Reviews</h5>
                                 <% } %>
-                                <h4 class="m-sing"> rs: <%= product.price %> <span>rs 10000</span></h4>
+                                <h4 class="m-sing"> rs: <%= product.price %> 
+                                    <!-- <span>rs 100000</span> -->
+                                </h4>
                             </div>
                             
                             <div style="margin-left: 60px;">
@@ -89,41 +91,10 @@
                     </div>
                     <div class="w3agile_description">
                         <h4> Helpful Details</h4>
-                        <p style="text-align: justify;"> Ceiling mounted fixture inspired by modern industrial design
-                            features four tapered glass
-                            lights
-                            set
-                            on the ends of two horizontal arms in a trendy matte black finish
-                            Fixture arms can be rotated horizontally to create the perfect silhouette and fit into any
-                            interior
-                            design
-                            Uniquely designed to be a versatile ceiling fixture that is ideal for use in a foyer, living
-                            room,
-                            office, or as a linear piece over a dining table
-                            Includes an assortment of hanging rods (1 x 6", 2 x 12", 1 x 18") and a sloped ceiling
-                            adapter
-                            to
-                            ensure a proper fit in any home
-                            This hanging light uses 4 E26 bulbs (sold separately)
-                            This fixture is dimmable when paired with a proper dimmer and bulbs (sold separately)
-                        </p>
+                        <p style="text-align: justify;"><%=product.helpfulDetails%></p>
                         <br>
                         <h4> About This Product</h4>
-                        <p style="text-align: justify;"> Boasting a trendy modern industrial design, our Mason 4-Light
-                            Chandelier is a perfect blend
-                            of form and function. Tapered glass shades are set on the ends of horizontal arms suspended
-                            from a
-                            single
-                            downrod and disc-shaped canopy. This ceiling light incorporates adjustable arms that rotate
-                            horizontally to create the perfect shape for your design needs - create a narrow shape down
-                            to
-                            13"
-                            wide, or open up the arms to a symmetrical shape at 32" wide. The Mason 4-Light Chandelier
-                            is
-                            available in a gorgeous matte black finish that draws on the industrial design of the
-                            ceiling
-                            fixture.
-                        </p>
+                        <p style="text-align: justify;"><%=product.aboutProduct%> </p>
                     </div>
                 </div>
 

@@ -12,15 +12,15 @@ const loadProducts = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const { name, description, quantity, category, price } = req.body;
-  console.log(name, description);
+  const { name, aboutProduct, helpfulDetails, quantity, category, price } = req.body;
   const images = req.files.map((file) => file.filename);
   const updatedImages = images.length > 0 ? images : productData.images;
   let categories = await Category.find({});
 
   const newProduct = new Product({
     name,
-    description,
+    aboutProduct,
+    helpfulDetails,
     images: updatedImages,
     quantity,
     category,
@@ -72,9 +72,12 @@ const editProductList = async (req, res) => {
 
 const updateProductList = async (req, res) => {
   try {
+    console.log("fvbbv.");
+
     const id = req.body.id;
     const name = req.body.name;
-    const description = req.body.description;
+    const aboutProduct = req.body.aboutProduct;
+    const helpfulDetails = req.body.helpfulDetails
     const price = req.body.price;
     const category = req.body.category;
     const status = req.body.status === "listed";
@@ -90,7 +93,8 @@ const updateProductList = async (req, res) => {
       {
         $set: {
           name: name,
-          description: description,
+          aboutProduct: aboutProduct,
+          helpfulDetails:helpfulDetails,
           price: price,
           category: category,
           is_listed: status,

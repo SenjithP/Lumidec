@@ -154,6 +154,7 @@ const refund = async (req, res) => {
     const cart = await Cart.findOne({ userId: user_id }).populate(
       "products.productId"
     );
+    console.log(cart);
     const items = cart.products.map((item) => {
       const product = item.productId;
       const quantity = item.quantity;
@@ -179,12 +180,12 @@ const refund = async (req, res) => {
       await Product.findByIdAndUpdate(item.product, { quantity: quan });
     });
 
-    console.log(order.total);
     const wallets = user.totalWallet + order.total;
+    console.log(wallets);
     user.wallet.push(order.total);
     user.totalWallet = wallets;
     await user.save();
-    res.redirect("/order");
+    res.redirect("/admin/order");
   } catch (error) {
     console.error(error);
     res.send(error);
@@ -405,6 +406,17 @@ const reviewUnBlockUsers = async (req, res) => {
   }
 };
 
+const orderDetails = async(req,res)=>{
+  try{
+    const id = req.params.id;
+    const order_data = await Order.findOne({_id: id}).populate("user").populate("items.product").populate("items.quantity")
+   res.render('orderDetails',{order_data})
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+}
 module.exports = {
   admin,
   loadAdminLogin,
@@ -422,5 +434,6 @@ module.exports = {
   reviewUnreport,
   deleteComment,
   reviewBlockUsers,
-  reviewUnBlockUsers
+  reviewUnBlockUsers,
+  orderDetails
 };
