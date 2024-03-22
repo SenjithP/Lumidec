@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 
 const requireAuth = (req, res, next) => {
   if (req.session.user) {
+    console.log(req.session.user)    
     // User is authenticated, continue to the next middleware
     next();
   } else {

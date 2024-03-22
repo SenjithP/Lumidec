@@ -5,7 +5,7 @@ const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
 const couponController = require("../controllers/couponController");
 const bannerController = require("../controllers/bannerController");
-const multer = require('../multer/multer')
+const multer = require('../multer/multer')  
 const validate = require('../middleware/adminAuth');
 
 
@@ -95,15 +95,15 @@ adminRoute.put("/editCategory/:id",validate.requireAuth, categoryController.upda
 
 //LOGIN
 adminRoute.post("/adminlogin", adminController.adminLogin);
-
+    
 //CATEGORY
 adminRoute.post("/addCategory",validate.requireAuth, categoryController.createCategory);
 
 //PRODUCT 
 adminRoute.post("/addProduct",validate.requireAuth, multer.upload, productController.createProduct);
-adminRoute.post(
+adminRoute.post(    
   "/updateProductList",
-  multer.update,validate.requireAuth,
+  multer.update,validate.requireAuth,     
   productController.updateProductList
 );
 

@@ -1166,7 +1166,6 @@ const searchProduct = async (req, res) => {
 
     const category = await Category.find();
     const coupon = await Coupon.find({});
-
     const user = req.session.user;
 
     if (productResults.length > 0) {
@@ -1174,7 +1173,7 @@ const searchProduct = async (req, res) => {
         user,
         category,
         product: productResults,
-        coupon: coupon,
+        coupon,
         currentPage: page,
         totalPages,
       });
@@ -1182,16 +1181,20 @@ const searchProduct = async (req, res) => {
       res.render("shop", {
         user,
         category,
+        product: [],
+        coupon,
         message: "No products found matching the search query.",
-        product: productResults,
-        coupon: coupon,
+        currentPage: page,
+        totalPages
       });
     }
+    
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 const pricerange = async (req, res) => {
   try {
