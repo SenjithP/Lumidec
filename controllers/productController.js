@@ -72,7 +72,6 @@ const editProductList = async (req, res) => {
 
 const updateProductList = async (req, res) => {
   try {
-    console.log("fvbbv.");
 
     const id = req.body.id;
     const name = req.body.name;

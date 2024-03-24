@@ -314,7 +314,7 @@ const categoryPage = async (req, res) => {
       category,
       totalProducts,
       categoryName: selectedCategory ? selectedCategory.name : "All",
-      categoryDescription: selectedCategory.description
+      categoryDescription: selectedCategory.description,
     });
   } catch (err) {
     console.log("category page error", err);
@@ -878,6 +878,11 @@ const placeOrder = async (req, res) => {
     }
 
     if (payment_method === "COD" || payment_method === "WALLET") {
+      if (payment_method === "WALLET" && userSchema.totalWallet < totalPrice) {
+       return res
+          .status(500)
+          .json({ message: "Your wallet has no sufficient balance" });
+      }
       const order = new Order({
         user: user_id,
         items: items,
@@ -1085,7 +1090,7 @@ const orderdetailspage = async (req, res) => {
       .populate("user")
       .populate("items.product")
       .populate("items.quantity");
-    res.render("orderdetail", { order_data, users,user });
+    res.render("orderdetail", { order_data, users, user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -1185,16 +1190,14 @@ const searchProduct = async (req, res) => {
         coupon,
         message: "No products found matching the search query.",
         currentPage: page,
-        totalPages
+        totalPages,
       });
     }
-    
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 const pricerange = async (req, res) => {
   try {

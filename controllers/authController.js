@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const OTPHelper = require("../helpers/OTPhelper");
 const hashPasswordHelper = require("../helpers/hashPassword");
 const Product = require("../models/productModel");
-const {referalIdGenerator} = require("../helpers/orderIdGenerator");
+const { referalIdGenerator } = require("../helpers/orderIdGenerator");
 
 //GET REGISTER PAGE
 const loadRegister = async (req, res) => {
@@ -31,8 +31,14 @@ const sendOTP = async (req, res) => {
       // Return success status
       sendOtpBtnClicked = true;
       req.session.sendOtpBtnClicked = sendOtpBtnClicked;
-      res.status(200).json({ message: "OTP Send successfully" });
-      await OTPHelper.sendOTP(req, enteredMobile); // Send the OTP to the user's mobile number
+      let otpSendOrNot = await OTPHelper.sendOTP(req, enteredMobile); // Send the OTP to the user's mobile number
+      if (otpSendOrNot) {
+        res.status(200).json({ message: "OTP Send successfully" });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Twilio (OTP) trial account service is down." });
+      }
     } else {
       return res.status(400).json({ message: "Invalid Mobile number" });
     }
@@ -74,7 +80,7 @@ const verifyreferalId = async (req, res) => {
     let verified = false;
 
     // Get the current date in YYYY-MM-DD format
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toISOString().split("T")[0];
 
     // Reset usage count for the referral ID if it's a new day
     if (referralUsageData[enteredReferalId]?.lastDate !== currentDate) {
@@ -83,10 +89,14 @@ const verifyreferalId = async (req, res) => {
 
     // Check if the referral ID has been used more than three times today
     if (referralUsageData[enteredReferalId].count >= 3) {
-      return res.status(400).json({ message: "Maximum limit reached for this referral ID today" });
+      return res
+        .status(400)
+        .json({ message: "Maximum limit reached for this referral ID today" });
     }
 
-    const oldUserReferalId = await User.findOne({ referalId: enteredReferalId });
+    const oldUserReferalId = await User.findOne({
+      referalId: enteredReferalId,
+    });
     if (!oldUserReferalId) {
       return res.status(400).json({ message: "Invalid Referral Id" });
     }
@@ -105,7 +115,6 @@ const verifyreferalId = async (req, res) => {
     return res.status(500).json({ message: "An error occurred" });
   }
 };
-
 
 //REGISTER USER
 const insertUser = async (req, res) => {
@@ -162,14 +171,14 @@ const insertUser = async (req, res) => {
       req.body.password
     );
 
-    const referalId = referalIdGenerator()
+    const referalId = referalIdGenerator();
     // Create a new User instance
     const user = new User({
       name: req.body.name,
       email: req.body.email,
       mobile: req.body.mobile,
       password: hashedPassword,
-      referalId:referalId.toString()
+      referalId: referalId.toString(),
     });
 
     if (req.session.verified) {
@@ -180,7 +189,9 @@ const insertUser = async (req, res) => {
 
         await oldUser.save();
       } else {
-        return res.status(500).json({ message: "No user found with the provided referral ID" });
+        return res
+          .status(500)
+          .json({ message: "No user found with the provided referral ID" });
       }
       // Add 100 to the new user's wallet
       user.totalWallet += 100;
@@ -202,10 +213,10 @@ const insertUser = async (req, res) => {
 //LOAD LOGIN PAGE
 const loginLoad = async (req, res) => {
   try {
-    if(req.session.user){
-      res.redirect('/home')
-    }else{
-    res.render("login");
+    if (req.session.user) {
+      res.redirect("/home");
+    } else {
+      res.render("login");
     }
   } catch (error) {
     console.log(error.message);

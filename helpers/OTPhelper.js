@@ -11,7 +11,6 @@ const sendOTP = async (req, mobile) => {
     console.log("OTP verification status:", verification.status);
   } catch (error) {
     console.log(error.message);
-    throw error;
   }
 };
 
